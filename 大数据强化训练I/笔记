@@ -1,0 +1,37 @@
+支持度support是两件商品共同出现的概率，可以记录为P(A并B)。
+support = frq(x,y)/N x和y同时出现的次数除以总次数。
+
+置信度confidence：条件概率。两件商品其中一件出现在购物车中时，另一件也会出现的概率。记录为P(B|A)。
+confidence = frq(x,y)/frq(x)
+
+apriori algorithm
+数据挖掘算法：关联规则
+1.定义1 项目与项集
+
+设I={i1,i2,…,im}是m个不同项目的集合，每个ik(k=1，2，……，m)称为一个项目(Item)。
+项目的集合 I 称为项目集合(Itemset)，简称为项集。其元素个数称为项集的长度，长度为k的项集称为k-项集(k-Itemset)。
+
+2.定义2 交易
+
+每笔交易T(Transaction)是项集I上的一个子集，即TimageI，但通常TimageI。
+对应每一个交易有一个唯一的标识——交易号，记作TID
+交易的全体构成了交易数据库D，或称交易记录集D，简称交易集D。
+交易集D中包含交易的个数记为|D|。
+
+3.定义3 项集的支持度
+对于项集X，XimageI，设定count(XimageT)为交易集D中包含X的交易的数量
+
+image
+项集X的支持度support(X)就是项集X出现的概率，从而描述了X的重要性。
+
+list = support/(support(x)*support(y))
+
+recommendation system:
+User-based:If user A likes a; user B likes a, b and c; user C likes a and c; then user A shares similar interest with B and C,
+because all of them like a. Therefore, we recommend c to A.
+Item-based: Calculate the similarities between items. If item a is similar to item b and user A likes a, we recommend b to A.
+
+Distance based on cosine similarity: cosine similarity
+Distance based on correlation: sim
+i和j的相似度计算：首先需要计算i和j的平均值，然后使用到所有用户对i和j的值，用这个去减去平均的i。然后计算所有用户的这个值的和。分母是像cos一样分别平方开根相乘。
+
