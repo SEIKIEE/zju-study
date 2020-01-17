@@ -1,0 +1,24 @@
+ch01-(资源管理)
+Answer: 
+Servers: memory and CPU resources, storage, network band- width.
+Desktops: memory and CPU resouces
+Smartphones: power consumption, memory resources.
+
+ch01-(Cache)
+Answer:
+Caches are useful when two or more components need to exchange data, and the components perform transfers at differing speeds. Caches solve the transfer problem by providing a buffer of intermediate speed between the components. If the fast device finds the data it needs in the cache, it need not wait for the slower device. The data in the cache must be kept consistent with the data in the components. If a component has a data value change, and the datum is also in the cache, the cache must also be updated. This is especially a problem on multiprocessor systems where more than one process may be accessing a datum. A component may be eliminated by an equal-sized cache, but only if: (a) the cache and the component have equivalent state-saving capacity (that is, if the component retains its data when electricity is removed, the cache must retain data as well), and (b) the cache is affordable, because faster storage tends to be more expensive.
+
+ch01-(Misc)
+Answer:
+Batch. Jobs with similar needs are batched together and run through the computer as a group by an operator or automatic job sequencer. Performance is increased by attempting to keep CPU and I/O devices busy at all times through buffering, off-line operation, spooling, and multiprogramming. Batch is good for ex- ecuting large jobs that need little interaction; it can be submitted and picked up later.
+Interactive. This system is composed of many short transactions where the results of the next transaction may be unpredictable. Response time needs to be short (seconds) since the user submits and waits for the result.
+Time sharing. This systems uses CPU scheduling and multipro- gramming to provide economical interactive use of a system. The CPU switches rapidly from one user to another. Instead of having a job defined by spooled card images, each program reads its next control card from the terminal, and output is normally printed immediately to the screen.
+Real time. Often used in a dedicated application, this system reads information from sensors and must respond within a fixed amount of time to ensure correct performance.
+Network. Provides operating system features across a network such as file sharing.
+SMP. Used in systems where there are multiple CPU’s each run- ning the same copy of the operating system. Communication takes place across the system bus.
+Distributed.This system distributes computation among several physical processors. The processors do not share memory or a clock. Instead, each processor has its own local memory. They communicate with each other through various communication lines, such as a high-speed bus or local area network.
+Clustered. A clustered system combines multiple computers into a single system to perform computational task distributed across the cluster.
+
+
+
+
