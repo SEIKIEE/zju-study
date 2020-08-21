@@ -1,0 +1,38 @@
+FUNCTION gcd :
+PARAM tempa-gcd
+PARAM tempb-gcd
+var1 = #0
+var0 = tempb-gcd == var1
+IF_FALSE var0 GOTO L0
+tempgcd = tempa-gcd
+LABEL L0
+IF var0 GOTO L1
+BEGIN_ARGS
+var3 = tempb-gcd
+ARG var3
+var4 = tempa-gcd % tempb-gcd
+ARG var4
+var2 = CALL gcd
+tempgcd = var2
+LABEL L1
+RETURN tempgcd
+FUNCTION main :
+BEGIN_ARGS
+var7 = #9
+ARG var7
+var8 = #36
+ARG var8
+var6 = CALL gcd
+BEGIN_ARGS
+var10 = #3
+ARG var10
+var11 = #6
+ARG var11
+var9 = CALL gcd
+var5 = var6 * var9
+tempans-hello = var5
+var12 = tempans-hello
+BEGIN_ARGS
+ARG var12
+CALL WRITELN
+RETURN #0

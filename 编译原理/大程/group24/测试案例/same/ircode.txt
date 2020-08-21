@@ -1,0 +1,42 @@
+FUNCTION go :
+PARAM tempb-go
+PARAM tempa-go
+var1 = #0
+var0 = tempa-go == var1
+IF_FALSE var0 GOTO L0
+BEGIN_ARGS
+var4 = tempb-go
+ARG var4
+var6 = #1
+var5 = tempa-go - var6
+ARG var5
+var3 = CALL go
+var2 = tempa-go * var3
+tempgo = var2
+LABEL L0
+IF var0 GOTO L1
+tempgo = #1
+LABEL L1
+var7 = tempb-go + tempgo
+tempb-go = var7
+var8 = tempk-hello + tempgo
+tempk-hello = var8
+RETURN tempgo
+FUNCTION main :
+tempk-hello = #0
+BEGIN_ARGS
+var10 = tempk-hello
+ARG var10
+var11 = #5
+ARG var11
+var9 = CALL go
+tempf-hello = var9
+var12 = tempf-hello
+BEGIN_ARGS
+ARG var12
+CALL WRITELN
+var13 = tempk-hello
+BEGIN_ARGS
+ARG var13
+CALL WRITELN
+RETURN #0

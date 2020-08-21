@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjuzjy.questionnaire.resource.mapper.AnswerMapper">
+
+    <resultMap id="answerSheetMap" type="AnswerSheet">
+        <id property="answerSheetID" column="answerSheetID"/>
+        <result property="paperID" column="paperID"/>
+        <result property="userID" column="userID"/>
+        <result property="ipAddress" column="ipAddress"/>
+        <result property="submitTime" column="submitTime"/>
+        <collection property="answerList" ofType="Answer">
+            <result property="questionID" column="questionID"/>
+            <result property="answer" column="answer"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="AnswerStatisticsMap" type="AnswerStatistics">
+        <id property="questionID" column="questionID"/>
+        <result property="title" column="title"/>
+        <collection property="statisticsList" ofType="Statistics">
+            <result property="answer" column="answer"/>
+            <result property="num" column="num"/>
+            <result property="sum" column="sum"/>
+            <result property="max" column="max"/>
+            <result property="min" column="min"/>
+            <result property="avg" column="avg"/>
+        </collection>
+    </resultMap>
+
+    <delete id="clearAnswerSheet">
+        delete
+        from answerSheet
+        where paperID = #{paperID}
+    </delete>
+
+    <select id="getTotalSubmitTime" resultType="Integer">
+        select count(*)
+        from answer_sheet
+        where paperID = #{paperID}
+        and ipAddr = #{ipAddr}
+    </select>
+
+    <select id="getDailySubmitTime" resultType="Integer">
+        select count(*)
+        from answerSheet
+        where paperID = #{paperID}
+        and ipAddress = #{ipAddress}
+        and to_days(submitTime) = to_days(now());
+    </select>
+
+    <select id="getMaxSubmitTime" resultType="Integer">
+        select count(*)
+        from answerSheet
+        where paperID = #{paperID}
+        and ipAddress = #{ipAddress}
+    </select>
+
+    <insert id="createAnswerSheet" useGeneratedKeys="true" keyProperty="answerSheetID">
+        insert into answerSheet(paperID, userID, ipAddress, submitTime)
+        values (#{paperID}, #{userID}, #{ipAddress}, CURRENT_TIMESTAMP)
+    </insert>
+
+    <insert id="insertAnswer">
+        insert into answer(answerID, answerSheetID, questionID, answer) values
+        <foreach item="item" collection="list" separator=",">
+            (#{item.answerID}, #{answerSheetID}, #{item.questionID}, #{item.answer})
+        </foreach>
+    </insert>
+
+    <select id="getAnswerSheetByPaperId" resultMap="answerSheetMap">
+        select * from answerSheet natural left outer join answer
+        where paperID = #{paperID};
+    </select>
+
+    <delete id="deleteAnswerSheet">
+        delete
+        from answerSheet
+        where answerSheetID = #{answerSheetID}
+        and paperID = #{paperID}
+    </delete>
+
+    <select id="getAnswerSheet" resultMap="answerSheetMap">
+        select *
+        from answerSheet
+        natural left outer join answer
+        where answerSheetID = #{answerSheetID}
+    </select>
+
+    <select id="getStatistics" resultMap="AnswerStatisticsMap">
+        select question.questionID, question.title, answer, count(answer) as num
+        from answer natural left outer join answerSheet natural left outer join question
+        where answerSheet.paperID = #{paperID} AND questionID = #{questionID} GROUP BY answer;
+    </select>
+
+</mapper>

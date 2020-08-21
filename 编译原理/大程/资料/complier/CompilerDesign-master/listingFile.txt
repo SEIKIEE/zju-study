@@ -1,0 +1,11 @@
+1   
+2   Program dumb () 
+3       
+4   begin
+5     if 998>998.0 then
+6       writeln("A")
+7   end.
+
+|=========== warning:	0 ==========|
+
+|----------------------SymbolTable---------------------|

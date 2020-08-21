@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!--用于简写的别名配置-->
+    <typeAliases>
+        <typeAlias type="com.zjuzjy.questionnaire.resource.entity.User" alias="User"/>
+        <typeAlias type="com.zjuzjy.questionnaire.resource.entity.Paper" alias="Paper"/>
+        <typeAlias type="com.zjuzjy.questionnaire.resource.entity.question.Question" alias="Question"/>
+        <typeAlias type="com.zjuzjy.questionnaire.resource.entity.question.Option" alias="Option"/>
+        <typeAlias type="com.zjuzjy.questionnaire.resource.entity.AnswerSheet" alias="AnswerSheet"/>
+        <typeAlias type="com.zjuzjy.questionnaire.resource.entity.Answer" alias="Answer"/>
+        <typeAlias type="com.zjuzjy.questionnaire.resource.entity.Statistics"
+                   alias="Statistics"/>
+        <typeAlias type="com.zjuzjy.questionnaire.resource.entity.AnswerStatistics"
+                   alias="AnswerStatistics"/>
+    </typeAliases>
+
+</configuration>

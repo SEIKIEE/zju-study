@@ -1,0 +1,3 @@
+flex [file name].l
+cc lex.yy.c -ll
+./a.out < [text]

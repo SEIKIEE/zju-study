@@ -1,0 +1,27 @@
+	1:	program
+	1:	hello
+	1:	;
+	2:	var
+	2:	a
+	2:	:
+	2:	integer
+	2:	;
+	3:	begin
+	4:	for
+	4:	a
+	4:	:=
+	4:	1
+	4:	to
+	4:	10
+	4:	do
+	5:	begin
+	6:	writeln
+	6:	(
+	6:	a
+	6:	)
+	6:	;
+	7:	end
+	7:	;
+	8:	end
+	9:	.
+	10:	

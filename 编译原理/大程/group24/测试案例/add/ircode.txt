@@ -1,0 +1,8 @@
+FUNCTION main :
+tempa-proc = #100
+tempb-proc = #200
+var0 = #300
+BEGIN_ARGS
+ARG var0
+CALL WRITE
+RETURN #0

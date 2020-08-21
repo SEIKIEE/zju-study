@@ -1,0 +1,1 @@
+g++ -o genCode main.cpp genCode.cpp

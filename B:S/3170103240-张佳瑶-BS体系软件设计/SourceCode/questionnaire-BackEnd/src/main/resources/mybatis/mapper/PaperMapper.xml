@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjuzjy.questionnaire.resource.mapper.PaperMapper">
+
+    <resultMap id="paperMap" type="Paper">
+        <id property="paperID" column="paperID"/>
+        <result property="papername" column="papername"/>
+        <result property="description" column="description"/>
+        <result property="priority" column="priority"/>
+        <result property="maxSubmit" column="maxSubmit"/>
+        <result property="startTime" column="startTime"/>
+        <result property="endTime" column="endTime"/>
+        <result property="userID" column="userID"/>
+        <result property="status" column="status"/>
+        <result property="anonymous" column="anonymous"/>
+        <collection property="questionList" ofType="Question">
+            <id property="questionID" column="questionID"/>
+            <result property="title" column="title"/>
+            <result property="required" column="required"/>
+            <result property="type" column="type" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"/>
+            <result property="minVal" column="minVal"/>
+            <result property="maxVal" column="maxVal"/>
+            <result property="minTitle" column="minTitle"/>
+            <result property="maxTitle" column="maxTitle"/>
+            <collection property="options" ofType="option">
+                <id property="optionID" column="optionID"/>
+                <result property="description" column="optionDescription"/>
+                <collection property="cascade" ofType="int">
+                    <result column="cascadeID"/>
+                </collection>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <insert id="createPaper" useGeneratedKeys="true" keyProperty="paperID" parameterType="Paper">
+        insert into paper(userID,papername,description,priority,status,maxSubmit,startTime,endTime,anonymous)
+        values
+        (#{userID},#{papername},#{description},#{priority},#{status},#{maxSubmit},#{startTime},#{endTime},#{anonymous});
+    </insert>
+
+    <select id="getPaper" resultMap="paperMap">
+        select X.paperID, X.papername, X.description, X.priority, X.maxSubmit,
+        X.startTime, X.endTime, X.userID, X.status, X.anonymous,
+        question.questionID, question.title as title, question.required, question.type,
+        question.minVal, question.maxVal, question.minTitle, question.maxTitle,
+        questionOption.optionID, questionOption.optionDescription as optionDescription, oa.cascadeID
+        from (select * from paper where paper.paperID = #{paperID}) as X left outer join question on X.paperID =
+        question.paperID
+        left join questionOption left join association oa on questionOption.optionID = oa.optionID
+        on question.questionID = questionOption.questionID
+    </select>
+
+    <select id="getUserPaper" resultType="Paper">
+        select paper.*, count(answerSheet.userID) as answerSheetNum from paper natural left outer join answerSheet where
+        userID =
+        #{userID} group by paperID;
+    </select>
+
+    <delete id="deletePaper">
+        delete from paper where paperID = #{paperID};
+    </delete>
+
+    <update id="setPaperStatus">
+        update paper set status = #{status} where paperID = #{paperID};
+    </update>
+
+    <select id="getPaperInfo" resultType="Paper">
+        select * from paper where paperID = #{paperID};
+    </select>
+
+    <delete id="clearPaper">
+        delete from question where paperID = #{paperID};
+    </delete>
+
+    <insert id="insertQuestions" useGeneratedKeys="true" keyProperty="param1.questionID">
+        insert into question(paperID, title, required, type, minVal, maxVal, minTitle, maxTitle) values
+        <foreach item="item" collection="list" separator=",">
+            (#{paperID}, #{item.title}, #{item.required},
+            #{item.type, typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
+            #{item.minVal}, #{item.maxVal}, #{item.minTitle}, #{item.maxTitle})
+        </foreach>
+    </insert>
+
+    <insert id="insertOptions" useGeneratedKeys="true" keyProperty="param1.optionID">
+        insert into questionOption(questionID, optionDescription) values
+        <foreach item="item" collection="list" separator=",">
+            (#{questionID}, #{item.description})
+        </foreach>
+    </insert>
+
+    <insert id="associateOptions">
+        insert into association(optionID, cascadeID) values
+        <foreach item="item" collection="list" separator=",">
+            (#{optionID}, #{item})
+        </foreach>
+    </insert>
+
+    <select id="getQuestionIdFromPaper" resultType="Integer">
+        select questionID from question where paperID = #{paperID};
+    </select>
+
+    <select id="getQuestionId" resultType="Integer">
+        select questionID from question where paperID = #{paperID};
+    </select>
+</mapper>

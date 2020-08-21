@@ -1,0 +1,14 @@
+FUNCTION main :
+tempa-hello = #1
+LABEL L0
+var0 = #10
+var1 = tempa-hello > var0
+IF var1 GOTO L1
+var2 = tempa-hello
+BEGIN_ARGS
+ARG var2
+CALL WRITELN
+tempa-hello = tempa-hello + #1
+GOTO L0
+LABEL L1
+RETURN #0

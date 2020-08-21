@@ -1,0 +1,16 @@
+FUNCTION main :
+tempnum-w = #1
+LABEL L0
+var1 = #5
+var0 = tempnum-w < var1
+IF_FALSE var0 GOTO L1
+var3 = #1
+var2 = tempnum-w + var3
+tempnum-w = var2
+GOTO L0
+LABEL L1
+var4 = tempnum-w
+BEGIN_ARGS
+ARG var4
+CALL WRITELN
+RETURN #0

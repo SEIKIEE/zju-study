@@ -1,0 +1,16 @@
+  ProgramDecl:proc
+    RoutineheadDecl
+      VarDecl
+        Id:a
+        Id:b
+        SimpleSysType:IntExpType
+    Assign
+      Id:a
+      Const:100
+    Assign
+      Id:b
+      Const:200
+    ProcSys
+      Oper:+
+        Const:100
+        Const:200

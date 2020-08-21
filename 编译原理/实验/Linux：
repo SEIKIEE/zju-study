@@ -1,0 +1,16 @@
+Linux：
+gcc 自带
+
+bison: yark 2.2
+
+flex: lex 2.5.33
+
+
+Windows：
+lex和yacc
+
+mips作为目标代码，然后用mips仿真器可以运行
+parsegenerator 4.0
+
+表示一行：
+.*\n

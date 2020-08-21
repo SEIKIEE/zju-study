@@ -1,0 +1,7 @@
+
+Program dumb () 
+    
+begin
+  if 998>998.0 then
+    writeln("A")
+end.

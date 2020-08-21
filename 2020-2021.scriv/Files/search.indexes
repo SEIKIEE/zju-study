@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SearchIndexes Version="1.0">
+    <Documents>
+        <Document ID="1DEC2A30-8D19-4E1F-8AB1-463C099CEEEF">
+            <Title>B/S体系软件设计</Title>
+        </Document>
+        <Document ID="368FD22B-36D7-43DD-88F4-3A420C7FC9BA">
+            <Title>上下文无关文法</Title>
+            <Text>分析程序的任务是从由扫描程序产生的记号中确定程序的语法结构，以及或隐式或显式地构造出表示该结构的分析树或语法树。
+
+推导：
+#
+
+分析树
+#
+
+抽象语法树
+#
+
+BNF二义性解决方法：
+#
+#
+写成这样，加减就更接近于根的位置。更接近根的位置的运算符的优先级会越低。同时将递归全部放到一边上去。（就是不要有两个exp，要一边exp，一边term）
+
+为了满足结合性的要求，运用递归。左递归规则使运算符在左边结合，右递归规则使他们在右边结合，重写规则使所有的运算符都左结合。
+#
+
+
+悬挂else
+#
+</Text>
+        </Document>
+        <Document ID="0C75A7DA-ADEB-4B9F-802B-0FFD0DF4778F">
+            <Text>#
+
+左递归消除：
+情况1:
+#
+	消除后：
+#
+
+情况2:
+ #
+消除后：
+#
+
+情况3:
+#
+消除后：
+#
+
+
+Fitst
+#
+
+Follow：
+#
+
+
+#
+</Text>
+        </Document>
+        <Document ID="A7B76768-A3E4-40A4-BDF9-7733C3C8864F">
+            <Title>大数据存储</Title>
+        </Document>
+        <Document ID="8272BAE1-D4AA-493C-96CE-FB49EABE4F2D">
+            <Title>自底向上</Title>
+            <Text>#
+空项就是分析过程中可能产生的错误。
+Goto针对的是非终结符，意思是在不同的状态遇到终结符进入的状态。
+
+SLR(1)文法
+判断条件：
+#
+
+1的意思是看到规约和移入在同一个状态的时候，要给规约那个开头的非终结符算一个FOLLOW集合，然后看X是不是在FOLLOW里面。
+2. 是两个规约一样了。</Text>
+        </Document>
+        <Document ID="A9004A85-8564-4D12-98D8-3E5AAD5B485F">
+            <Title>4.11</Title>
+            <Text>xing ni</Text>
+        </Document>
+        <Document ID="FFD708E6-E4AA-4580-9CE4-97CCE4CBCC5A">
+            <Title>词法分析</Title>
+        </Document>
+        <Document ID="FD1658D9-CEBF-4B87-B27A-2471E0CD97A0">
+            <Title>第一课</Title>
+            <Text>数据类型：
+结构化数据、非结构化数据
+
+存储体系结构的发展历史：
+以服务器为中心的存储体系结构。
+以信息为中心的存储体系架构：存信息的时候不关心信息在哪台服务器上，信息之间用虚拟的网络连接起来。
+数据中心：（可管理性）——数据完整性、可用性、安全性、性能、可扩展性、容量。
+
+虚拟化和云计算
+
+数据中心环境
+应用程序：为计算操作提供逻辑的软件程序。
+应用程序的关键I/O特性：读取密集型和写入密集型
+应用程序虚拟化：
+
+数据库管理系统（DBMS）
+
+文件系统
+
+计算虚拟化：在硬件上面增加一个虚拟化层，在虚拟层上安装很多虚拟机
+主机和磁盘之间用协议连接起来 SCSI 存储接口的基本协议
+
+存储选项
+光盘、磁盘驱动器、闪存驱动器
+
+数据保护
+RAID
+将多个磁盘驱动器合并到一个逻辑单元（RAID集）中并提供保护和/或性能的技术。
+
+
+</Text>
+        </Document>
+        <Document ID="E8F5CE99-C61E-4490-862F-62B36AEA96C7">
+            <Title>债券交易系统</Title>
+        </Document>
+        <Document ID="391592DD-E87C-4F21-95BD-BD08BC4E6219">
+            <Title>编译原理</Title>
+        </Document>
+        <Document ID="5FBFCBF9-8D1B-4F12-B428-CC88FFCE5EA8">
+            <Title>词法分析</Title>
+            <Text>词法分析器的核心是将正则表达式转换为不确定有穷自动机，然后再转换为确定有穷自动机。
+词法分析器的作用：1. 过滤源程序中的注释和空白 2. 将编译器生成的错误信息和源程序的位置联系在一起。
+
+正则表达式
+r | s
+r*
+rs
+优先级定义：
+	•	一元运算符*具有最高的优先级，并且是左结合的。
+	•	连接具有次高的优先级，左结合。
+	•	｜的优先级最低，左结合。
+	•	单目后缀运算符+表示一个正则表达式及其语言的正闭包，和运算符*具有相同的优先级和结合性。
+	•	单目后缀运算符-表示一个或零个出现，和运算符*、+具有相同的优先级和结合性。
+	•	[ ]
+
+一个或者多个重复：+
+任意字符：.
+字符范围：[  ]
+不在给定集合中的任意字符：～	比如，～(a|b|c)，在lex中可以写成[^abc]
+
+有穷自动机 finite automata
+	1.	不确定有穷自动机：对边上的标号没有任何限制。一个符号标记离开同一状态的多条边，并且空串也可以作为标号。
+	2.	确定有穷自动机：有且只有一条离开改状态、且该符号为标号的边。
+
+扫描程序将整个源程序转换为记号序列（token）。
+
+从正则表达式到NFA：
+#
+
+
+#
+#
+
+
+ab|a
+#
+
+
+letter*(letter|digit)*
+#
+
+用子集构造法可以讲NFA转换为DFA。
+</Text>
+        </Document>
+        <Document ID="EA556837-5132-4270-A308-59FD7A17C6FF">
+            <Title>3.7</Title>
+            <Text>Financial markets - Vanilla securities
+- Equity
+- Fixed incomed
+- Currency
+- Commodatio..
+1.投资者包括央行、保险公司和养老基金等，持有债券以满足流动性要求。在借贷时，他们也可以将其作为抵押品质押。
+2.一些投资者认为，即使收益率为负，他们仍然可以获利。例如，外国投资者可能认为人民币将升值，这将抵消负债券收益率。在国内，投资者可能预计会出现一段通货紧缩时期，这将使他们能够利用储蓄购买更多的商品和服务来赚钱。
+3.如果投资损失小于投资其他地方，投资者可能会选择负收益的债券。</Text>
+        </Document>
+        <Document ID="888C187B-B0EA-4A1C-8C30-272DB294AAC4">
+            <Title>3.14</Title>
+            <Text>表达能力+ 专业知识 + 技术
+复利频率增加，得到的利息越多
+再投资风险
+金融市场上的风险表示一种不确定性。
+信用等级
+投行的核心内容：pricing-价格到底是多少 risk calculation-PV FV 奠定了金融市场的根基
+
+作业：查一下可口可乐在今天最近发行的债券和coupon rate是多少以及coupon rate发生变化的原因。找一只债券具有最大的t。描述t的大小商含义。
+
+讲义第八页：
+债券到期是2004，coupon rate是7.5
+对多个现金流进行折现，然后计算他的价格。
+
+这次课所有的编程都是excel——债券定价
+
+Yield：return。债券收益率越来越低，债券价格越来越高。从数学公式上来看，是具有反相关联的关系。
+从公式、定义来理解债券的供给关系。
+债券是一个金融产品，在市场中需要和别的金融产品竞争，必须考虑市场收益率，在金融环境好的时候，相对收益率会差一点。
+
+Yield是不断改变的。
+LIBOR的定义。
+Reset rate在IRS中的定义。
+
+Minucolation market
+
+题目：当n变成无穷的时候，Present value会怎么样。 ——收敛
+
+学习能力
+
+用英语描述债券的分类
+
+
+</Text>
+        </Document>
+        <Document ID="CF3DC9A7-DE49-4962-9F92-D6080F57EF25">
+            <Title>作业2</Title>
+            <Text>第二题和第五题
+
+A. 0.1
+B. 
+C. 
+
+Time Value of Money – Pages 12 - 14
+Question 2 
+Question 5
+Due 23:59, Sat, 21 Mar 2020
+
+
+</Text>
+        </Document>
+        <Document ID="B64C81BF-7E1E-4EF9-8019-2214763D8845">
+            <Title>3.6</Title>
+            <Text>HTML的规范由w3c的组织在维护。目的是将文档在浏览器中呈现。
+DreamWeaver——拖放，一个更好的工具。
+HTML是在标准的文件中加入标签。</Text>
+        </Document>
+        <Document ID="3A13EE87-B80A-487A-90BF-5A314B393984">
+            <Title>作业1</Title>
+            <Text>3.4
+蚂蚁花呗是怎样分期付款？
+电脑3000元，分12个月还款。讲一个例子。
+
+Ant credit pay submit a interset-free installment payment strategy for retailers under Third Party payment paltform.
+The results show that when consumers choose to use interest-free installment payments    within    a    certain    range,    providing  interest-free installment payment services can bring greater profits to retailers.
+
+discription
+
+Ant Credit Pay charges a fee for each installment. Currently all the fees are paid by the customer. 
+In other country, All numbers involved in the calculation of installment is accurate to the cent. 
+The amount of principal of each installment is payment amount divided by number of installments and then rounded down. The amount of service fee of each installment is the product of payment amount multiplying fee rate divided by number of installments.
+
+Java code
+
+//计算每期本金
+BigDecimal eachPrin = BigDecimal.valueOf(payAmount).divide(new BigDecimal(“value of hb_fq_num”), BigDecimal.ROUND_DOWN);
+//计算总利息并取整
+BigDecimal totalFeeInDecimal = BigDecimal.valueOf(cent).multiply(feeRate);
+long totalFeeInLong = totalFeeInDecimal.setScale(0, BigDecimal.ROUND_HALF_EVEN).longValue();
+//计算每期利息并取整
+BigDecimal eachFee = BigDecimal.valueOf(totalFeeInLong).divide(new BigDecimal(“value of hb_fq_num”), BigDecimal.ROUND_DOWN);
+//计算每期还款总金额
+BigDecimal prinAndFee = eachFee.add(eachPrin);
+
+example
+
+The following table contains the fee rate for different installment plans.
+#
+The payment amount is 1111.11 CNY, where the customer pays in 3 installments, with a fee rate of 2.3%. The amounts are calculated in cents:
+	•	Principal of each installment:
+111111/3 = 37037 (370.37 CNY)
+	•	Service fee of each installment:
+111111 * 2.3%/3 = 852 (8.52 CNY)
+	•	Total amount of each installment:
+37037 + 852 = 37889 (378.89 CNY)
+
+</Text>
+        </Document>
+    </Documents>
+</SearchIndexes>

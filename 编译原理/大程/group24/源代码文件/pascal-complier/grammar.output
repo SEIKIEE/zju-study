@@ -1,0 +1,4782 @@
+Terminals which are not used
+
+   ERROR
+
+
+State 4 conflicts: 1 shift/reduce
+State 20 conflicts: 1 shift/reduce
+State 33 conflicts: 3 shift/reduce
+State 46 conflicts: 1 shift/reduce
+State 132 conflicts: 4 reduce/reduce
+State 138 conflicts: 1 shift/reduce
+State 139 conflicts: 1 shift/reduce
+State 213 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: program_head routine DOT
+
+    2 program_head: error SEMI
+    3             | PROGRAM ID SEMI
+
+    4 routine: error SEMI
+    5        | routine_head routine_body
+
+    6 sub_routine: error SEMI
+    7            | routine_head routine_body
+
+    8 routine_head: error SEMI
+    9             | const_part type_part var_part routine_part
+
+   10 const_part: CONST const_expr_list
+   11           | /* empty */
+
+   12 const_expr_list: const_expr_list const_expr
+   13                | const_expr
+
+   14 const_expr: ID EQUAL const_value SEMI
+
+   15 const_value: INTEGER
+   16            | REAL
+   17            | CHAR
+   18            | STRING
+   19            | TRUE
+   20            | FALSE
+   21            | MAXINT
+
+   22 type_part: TYPE type_decl_list
+   23          | /* empty */
+
+   24 type_decl_list: type_decl_list type_definition
+   25               | type_definition
+
+   26 type_definition: ID EQUAL type_decl SEMI
+
+   27 type_decl: simple_type_decl
+   28          | array_type_decl
+   29          | record_type_decl
+
+   30 simple_type_decl: ID
+   31                 | LP name_list RP
+   32                 | const_value DOTDOT const_value
+   33                 | MINUS const_value DOTDOT const_value
+   34                 | MINUS const_value DOTDOT MINUS const_value
+   35                 | ID DOTDOT ID
+   36                 | INTEGER_TYPE
+   37                 | BOOLEAN_TYPE
+   38                 | REAL_TYPE
+   39                 | CHAR_TYPE
+
+   40 array_type_decl: ARRAY LB simple_type_decl RB OF type_decl
+
+   41 record_type_decl: RECORD field_decl_list END
+
+   42 field_decl_list: field_decl_list field_decl
+   43                | field_decl
+
+   44 field_decl: name_list COLON type_decl SEMI
+
+   45 name_list: name_list COMMA ID
+   46          | ID
+
+   47 var_part: VAR var_decl_list
+   48         | /* empty */
+
+   49 var_decl_list: var_decl_list var_decl
+   50              | var_decl
+
+   51 var_decl: name_list COLON type_decl SEMI
+
+   52 routine_part: error SEMI
+   53             | /* empty */
+   54             | routine_part function_decl
+   55             | routine_part procedure_decl
+   56             | function_decl
+   57             | procedure_decl
+
+   58 function_decl: error SEMI
+   59              | function_head SEMI sub_routine SEMI
+
+   60 function_head: FUNCTION ID parameters COLON simple_type_decl
+
+   61 procedure_decl: procedure_head SEMI sub_routine SEMI
+
+   62 procedure_head: PROCEDURE ID parameters
+
+   63 parameters: /* empty */
+   64           | LP para_decl_list RP
+
+   65 para_decl_list: para_decl_list SEMI para_type_list
+   66               | para_type_list
+
+   67 para_type_list: var_name_list COLON simple_type_decl
+
+   68 var_name_list: VAR name_list
+   69              | name_list
+
+   70 INTEGER: TOKEN_INTEGER
+
+   71 ID: TOKEN_ID
+
+   72 routine_body: compound_stmt
+
+   73 compound_stmt: TOKEN_BEGIN stmt_list END
+
+   74 stmt_list: error SEMI
+   75          | stmt_list error SEMI
+   76          | /* empty */
+   77          | stmt_list stmt SEMI
+
+   78 stmt: INTEGER COLON non_label_stmt
+   79     | non_label_stmt
+
+   80 non_label_stmt: assign_stmt
+   81               | proc_stmt
+   82               | compound_stmt
+   83               | if_stmt
+   84               | repeat_stmt
+   85               | while_stmt
+   86               | for_stmt
+   87               | case_stmt
+   88               | goto_stmt
+
+   89 assign_stmt: ID ASSIGN expression
+   90            | ID LB expression RB ASSIGN expression
+   91            | ID DOT ID ASSIGN expression
+
+   92 proc_stmt: ID
+   93          | ID LP args_list RP
+   94          | READ LP factor RP
+   95          | WRITE
+   96          | WRITE LP expression_list RP
+   97          | WRITELN
+   98          | WRITELN LP expression_list RP
+
+   99 if_stmt: IF expression THEN stmt else_clause
+
+  100 else_clause: /* empty */
+  101            | ELSE stmt
+
+  102 repeat_stmt: REPEAT stmt_list UNTIL expression
+
+  103 while_stmt: WHILE expression DO stmt
+
+  104 for_stmt: FOR ID ASSIGN expression TO expression DO stmt
+  105         | FOR ID ASSIGN expression DOWNTO expression DO stmt
+
+  106 case_stmt: CASE expression OF case_expr_list END
+
+  107 case_expr_list: case_expr_list case_expr
+  108               | case_expr
+
+  109 case_expr: const_value COLON stmt SEMI
+  110          | ID COLON stmt SEMI
+
+  111 goto_stmt: GOTO INTEGER
+
+  112 expression_list: expression_list COMMA expression
+  113                | expression
+
+  114 expression: expression GE expr
+  115           | expression GT expr
+  116           | expression LE expr
+  117           | expression LT expr
+  118           | expression EQUAL expr
+  119           | expression UNEQUAL expr
+  120           | expr
+
+  121 expr: expr PLUS term
+  122     | expr MINUS term
+  123     | expr OR term
+  124     | term
+
+  125 term: term MUL factor
+  126     | term DIV factor
+  127     | term MOD factor
+  128     | term AND factor
+  129     | factor
+
+  130 factor: ID
+  131       | ABS
+  132       | CHR
+  133       | ODD
+  134       | ORD
+  135       | PRED
+  136       | SQR
+  137       | SQRT
+  138       | SUCC
+  139       | ID LP args_list RP
+  140       | const_value
+  141       | LP expression RP
+  142       | NOT factor
+  143       | MINUS factor
+  144       | ID LB expression RB
+  145       | ID DOT ID
+  146       | ABS LP args_list RP
+  147       | CHR LP args_list RP
+  148       | ODD LP args_list RP
+  149       | ORD LP args_list RP
+  150       | PRED LP args_list RP
+  151       | SQR LP args_list RP
+  152       | SQRT LP args_list RP
+  153       | SUCC LP args_list RP
+
+  154 args_list: args_list COMMA expression
+  155          | expression
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256) 2 4 6 8 52 58 74 75
+PROGRAM (258) 3
+FUNCTION (259) 60
+PROCEDURE (260) 62
+CONST (261) 10
+TYPE (262) 22
+VAR (263) 47 68
+IF (264) 99
+THEN (265) 99
+ELSE (266) 101
+REPEAT (267) 102
+UNTIL (268) 102
+WHILE (269) 103
+DO (270) 103 104 105
+CASE (271) 106
+TO (272) 104
+DOWNTO (273) 105
+FOR (274) 104 105
+EQUAL (275) 14 26 118
+UNEQUAL (276) 119
+GE (277) 114
+GT (278) 115
+LE (279) 116
+LT (280) 117
+ASSIGN (281) 89 90 91 104 105
+PLUS (282) 121
+MINUS (283) 33 34 122 143
+MUL (284) 125
+DIV (285) 126
+OR (286) 123
+AND (287) 128
+NOT (288) 142
+MOD (289) 127
+READ (290) 94
+WRITE (291) 95 96
+WRITELN (292) 97 98
+LB (293) 40 90 144
+RB (294) 40 90 144
+SEMI (295) 2 3 4 6 8 14 26 44 51 52 58 59 61 65 74 75 77 109 110
+DOT (296) 1 91 145
+DOTDOT (297) 32 33 34 35
+LP (298) 31 64 93 94 96 98 139 141 146 147 148 149 150 151 152 153
+RP (299) 31 64 93 94 96 98 139 141 146 147 148 149 150 151 152 153
+COMMA (300) 45 112 154
+COLON (301) 44 51 60 67 78 109 110
+INTEGER_TYPE (302) 36
+BOOLEAN_TYPE (303) 37
+CHAR_TYPE (304) 39
+REAL_TYPE (305) 38
+TRUE (306) 19
+FALSE (307) 20
+MAXINT (308) 21
+ARRAY (309) 40
+OF (310) 40 106
+RECORD (311) 41
+TOKEN_BEGIN (312) 73
+END (313) 41 73 106
+GOTO (314) 111
+TOKEN_ID (315) 71
+TOKEN_INTEGER (316) 70
+REAL (317) 16
+CHAR (318) 17
+STRING (319) 18
+ABS (320) 131 146
+CHR (321) 132 147
+ODD (322) 133 148
+ORD (323) 134 149
+PRED (324) 135 150
+SQR (325) 136 151
+SQRT (326) 137 152
+SUCC (327) 138 153
+ERROR (328)
+
+
+Nonterminals, with rules where they appear
+
+$accept (74)
+    on left: 0
+program (75)
+    on left: 1, on right: 0
+program_head (76)
+    on left: 2 3, on right: 1
+routine (77)
+    on left: 4 5, on right: 1
+sub_routine (78)
+    on left: 6 7, on right: 59 61
+routine_head (79)
+    on left: 8 9, on right: 5 7
+const_part (80)
+    on left: 10 11, on right: 9
+const_expr_list (81)
+    on left: 12 13, on right: 10 12
+const_expr (82)
+    on left: 14, on right: 12 13
+const_value (83)
+    on left: 15 16 17 18 19 20 21, on right: 14 32 33 34 109 140
+type_part (84)
+    on left: 22 23, on right: 9
+type_decl_list (85)
+    on left: 24 25, on right: 22 24
+type_definition (86)
+    on left: 26, on right: 24 25
+type_decl (87)
+    on left: 27 28 29, on right: 26 40 44 51
+simple_type_decl (88)
+    on left: 30 31 32 33 34 35 36 37 38 39, on right: 27 40 60 67
+array_type_decl (89)
+    on left: 40, on right: 28
+record_type_decl (90)
+    on left: 41, on right: 29
+field_decl_list (91)
+    on left: 42 43, on right: 41 42
+field_decl (92)
+    on left: 44, on right: 42 43
+name_list (93)
+    on left: 45 46, on right: 31 44 45 51 68 69
+var_part (94)
+    on left: 47 48, on right: 9
+var_decl_list (95)
+    on left: 49 50, on right: 47 49
+var_decl (96)
+    on left: 51, on right: 49 50
+routine_part (97)
+    on left: 52 53 54 55 56 57, on right: 9 54 55
+function_decl (98)
+    on left: 58 59, on right: 54 56
+function_head (99)
+    on left: 60, on right: 59
+procedure_decl (100)
+    on left: 61, on right: 55 57
+procedure_head (101)
+    on left: 62, on right: 61
+parameters (102)
+    on left: 63 64, on right: 60 62
+para_decl_list (103)
+    on left: 65 66, on right: 64 65
+para_type_list (104)
+    on left: 67, on right: 65 66
+var_name_list (105)
+    on left: 68 69, on right: 67
+INTEGER (106)
+    on left: 70, on right: 15 78 111
+ID (107)
+    on left: 71, on right: 3 14 26 30 35 45 46 60 62 89 90 91 92 93
+    104 105 110 130 139 144 145
+routine_body (108)
+    on left: 72, on right: 5 7
+compound_stmt (109)
+    on left: 73, on right: 72 82
+stmt_list (110)
+    on left: 74 75 76 77, on right: 73 75 77 102
+stmt (111)
+    on left: 78 79, on right: 77 99 101 103 104 105 109 110
+non_label_stmt (112)
+    on left: 80 81 82 83 84 85 86 87 88, on right: 78 79
+assign_stmt (113)
+    on left: 89 90 91, on right: 80
+proc_stmt (114)
+    on left: 92 93 94 95 96 97 98, on right: 81
+if_stmt (115)
+    on left: 99, on right: 83
+else_clause (116)
+    on left: 100 101, on right: 99
+repeat_stmt (117)
+    on left: 102, on right: 84
+while_stmt (118)
+    on left: 103, on right: 85
+for_stmt (119)
+    on left: 104 105, on right: 86
+case_stmt (120)
+    on left: 106, on right: 87
+case_expr_list (121)
+    on left: 107 108, on right: 106 107
+case_expr (122)
+    on left: 109 110, on right: 107 108
+goto_stmt (123)
+    on left: 111, on right: 88
+expression_list (124)
+    on left: 112 113, on right: 96 98 112
+expression (125)
+    on left: 114 115 116 117 118 119 120, on right: 89 90 91 99 102
+    103 104 105 106 112 113 114 115 116 117 118 119 141 144 154 155
+expr (126)
+    on left: 121 122 123 124, on right: 114 115 116 117 118 119 120
+    121 122 123
+term (127)
+    on left: 125 126 127 128 129, on right: 121 122 123 124 125 126
+    127 128
+factor (128)
+    on left: 130 131 132 133 134 135 136 137 138 139 140 141 142 143
+    144 145 146 147 148 149 150 151 152 153, on right: 94 125 126 127
+    128 129 142 143
+args_list (129)
+    on left: 154 155, on right: 93 139 146 147 148 149 150 151 152
+    153 154
+
+
+state 0
+
+    0 $accept: . program $end
+
+    error    shift, and go to state 1
+    PROGRAM  shift, and go to state 2
+
+    program       go to state 3
+    program_head  go to state 4
+
+
+state 1
+
+    2 program_head: error . SEMI
+
+    SEMI  shift, and go to state 5
+
+
+state 2
+
+    3 program_head: PROGRAM . ID SEMI
+
+    TOKEN_ID  shift, and go to state 6
+
+    ID  go to state 7
+
+
+state 3
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 8
+
+
+state 4
+
+    1 program: program_head . routine DOT
+
+    error  shift, and go to state 9
+    CONST  shift, and go to state 10
+
+    error        [reduce using rule 11 (const_part)]
+    FUNCTION     reduce using rule 11 (const_part)
+    PROCEDURE    reduce using rule 11 (const_part)
+    TYPE         reduce using rule 11 (const_part)
+    VAR          reduce using rule 11 (const_part)
+    TOKEN_BEGIN  reduce using rule 11 (const_part)
+
+    routine       go to state 11
+    routine_head  go to state 12
+    const_part    go to state 13
+
+
+state 5
+
+    2 program_head: error SEMI .
+
+    $default  reduce using rule 2 (program_head)
+
+
+state 6
+
+   71 ID: TOKEN_ID .
+
+    $default  reduce using rule 71 (ID)
+
+
+state 7
+
+    3 program_head: PROGRAM ID . SEMI
+
+    SEMI  shift, and go to state 14
+
+
+state 8
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+state 9
+
+    4 routine: error . SEMI
+    8 routine_head: error . SEMI
+
+    SEMI  shift, and go to state 15
+
+
+state 10
+
+   10 const_part: CONST . const_expr_list
+
+    TOKEN_ID  shift, and go to state 6
+
+    const_expr_list  go to state 16
+    const_expr       go to state 17
+    ID               go to state 18
+
+
+state 11
+
+    1 program: program_head routine . DOT
+
+    DOT  shift, and go to state 19
+
+
+state 12
+
+    5 routine: routine_head . routine_body
+
+    TOKEN_BEGIN  shift, and go to state 20
+
+    routine_body   go to state 21
+    compound_stmt  go to state 22
+
+
+state 13
+
+    9 routine_head: const_part . type_part var_part routine_part
+
+    TYPE  shift, and go to state 23
+
+    $default  reduce using rule 23 (type_part)
+
+    type_part  go to state 24
+
+
+state 14
+
+    3 program_head: PROGRAM ID SEMI .
+
+    $default  reduce using rule 3 (program_head)
+
+
+state 15
+
+    4 routine: error SEMI .
+    8 routine_head: error SEMI .
+
+    TOKEN_BEGIN  reduce using rule 8 (routine_head)
+    $default     reduce using rule 4 (routine)
+
+
+state 16
+
+   10 const_part: CONST const_expr_list .
+   12 const_expr_list: const_expr_list . const_expr
+
+    TOKEN_ID  shift, and go to state 6
+
+    $default  reduce using rule 10 (const_part)
+
+    const_expr  go to state 25
+    ID          go to state 18
+
+
+state 17
+
+   13 const_expr_list: const_expr .
+
+    $default  reduce using rule 13 (const_expr_list)
+
+
+state 18
+
+   14 const_expr: ID . EQUAL const_value SEMI
+
+    EQUAL  shift, and go to state 26
+
+
+state 19
+
+    1 program: program_head routine DOT .
+
+    $default  reduce using rule 1 (program)
+
+
+state 20
+
+   73 compound_stmt: TOKEN_BEGIN . stmt_list END
+
+    error  shift, and go to state 27
+
+    error          [reduce using rule 76 (stmt_list)]
+    IF             reduce using rule 76 (stmt_list)
+    REPEAT         reduce using rule 76 (stmt_list)
+    WHILE          reduce using rule 76 (stmt_list)
+    CASE           reduce using rule 76 (stmt_list)
+    FOR            reduce using rule 76 (stmt_list)
+    READ           reduce using rule 76 (stmt_list)
+    WRITE          reduce using rule 76 (stmt_list)
+    WRITELN        reduce using rule 76 (stmt_list)
+    TOKEN_BEGIN    reduce using rule 76 (stmt_list)
+    END            reduce using rule 76 (stmt_list)
+    GOTO           reduce using rule 76 (stmt_list)
+    TOKEN_ID       reduce using rule 76 (stmt_list)
+    TOKEN_INTEGER  reduce using rule 76 (stmt_list)
+
+    stmt_list  go to state 28
+
+
+state 21
+
+    5 routine: routine_head routine_body .
+
+    $default  reduce using rule 5 (routine)
+
+
+state 22
+
+   72 routine_body: compound_stmt .
+
+    $default  reduce using rule 72 (routine_body)
+
+
+state 23
+
+   22 type_part: TYPE . type_decl_list
+
+    TOKEN_ID  shift, and go to state 6
+
+    type_decl_list   go to state 29
+    type_definition  go to state 30
+    ID               go to state 31
+
+
+state 24
+
+    9 routine_head: const_part type_part . var_part routine_part
+
+    VAR  shift, and go to state 32
+
+    $default  reduce using rule 48 (var_part)
+
+    var_part  go to state 33
+
+
+state 25
+
+   12 const_expr_list: const_expr_list const_expr .
+
+    $default  reduce using rule 12 (const_expr_list)
+
+
+state 26
+
+   14 const_expr: ID EQUAL . const_value SEMI
+
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+
+    const_value  go to state 41
+    INTEGER      go to state 42
+
+
+state 27
+
+   74 stmt_list: error . SEMI
+
+    SEMI  shift, and go to state 43
+
+
+state 28
+
+   73 compound_stmt: TOKEN_BEGIN stmt_list . END
+   75 stmt_list: stmt_list . error SEMI
+   77          | stmt_list . stmt SEMI
+
+    error          shift, and go to state 44
+    IF             shift, and go to state 45
+    REPEAT         shift, and go to state 46
+    WHILE          shift, and go to state 47
+    CASE           shift, and go to state 48
+    FOR            shift, and go to state 49
+    READ           shift, and go to state 50
+    WRITE          shift, and go to state 51
+    WRITELN        shift, and go to state 52
+    TOKEN_BEGIN    shift, and go to state 20
+    END            shift, and go to state 53
+    GOTO           shift, and go to state 54
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+
+    INTEGER         go to state 55
+    ID              go to state 56
+    compound_stmt   go to state 57
+    stmt            go to state 58
+    non_label_stmt  go to state 59
+    assign_stmt     go to state 60
+    proc_stmt       go to state 61
+    if_stmt         go to state 62
+    repeat_stmt     go to state 63
+    while_stmt      go to state 64
+    for_stmt        go to state 65
+    case_stmt       go to state 66
+    goto_stmt       go to state 67
+
+
+state 29
+
+   22 type_part: TYPE type_decl_list .
+   24 type_decl_list: type_decl_list . type_definition
+
+    TOKEN_ID  shift, and go to state 6
+
+    $default  reduce using rule 22 (type_part)
+
+    type_definition  go to state 68
+    ID               go to state 31
+
+
+state 30
+
+   25 type_decl_list: type_definition .
+
+    $default  reduce using rule 25 (type_decl_list)
+
+
+state 31
+
+   26 type_definition: ID . EQUAL type_decl SEMI
+
+    EQUAL  shift, and go to state 69
+
+
+state 32
+
+   47 var_part: VAR . var_decl_list
+
+    TOKEN_ID  shift, and go to state 6
+
+    name_list      go to state 70
+    var_decl_list  go to state 71
+    var_decl       go to state 72
+    ID             go to state 73
+
+
+state 33
+
+    9 routine_head: const_part type_part var_part . routine_part
+
+    error      shift, and go to state 74
+    FUNCTION   shift, and go to state 75
+    PROCEDURE  shift, and go to state 76
+
+    error        [reduce using rule 53 (routine_part)]
+    FUNCTION     [reduce using rule 53 (routine_part)]
+    PROCEDURE    [reduce using rule 53 (routine_part)]
+    TOKEN_BEGIN  reduce using rule 53 (routine_part)
+
+    routine_part    go to state 77
+    function_decl   go to state 78
+    function_head   go to state 79
+    procedure_decl  go to state 80
+    procedure_head  go to state 81
+
+
+state 34
+
+   19 const_value: TRUE .
+
+    $default  reduce using rule 19 (const_value)
+
+
+state 35
+
+   20 const_value: FALSE .
+
+    $default  reduce using rule 20 (const_value)
+
+
+state 36
+
+   21 const_value: MAXINT .
+
+    $default  reduce using rule 21 (const_value)
+
+
+state 37
+
+   70 INTEGER: TOKEN_INTEGER .
+
+    $default  reduce using rule 70 (INTEGER)
+
+
+state 38
+
+   16 const_value: REAL .
+
+    $default  reduce using rule 16 (const_value)
+
+
+state 39
+
+   17 const_value: CHAR .
+
+    $default  reduce using rule 17 (const_value)
+
+
+state 40
+
+   18 const_value: STRING .
+
+    $default  reduce using rule 18 (const_value)
+
+
+state 41
+
+   14 const_expr: ID EQUAL const_value . SEMI
+
+    SEMI  shift, and go to state 82
+
+
+state 42
+
+   15 const_value: INTEGER .
+
+    $default  reduce using rule 15 (const_value)
+
+
+state 43
+
+   74 stmt_list: error SEMI .
+
+    $default  reduce using rule 74 (stmt_list)
+
+
+state 44
+
+   75 stmt_list: stmt_list error . SEMI
+
+    SEMI  shift, and go to state 83
+
+
+state 45
+
+   99 if_stmt: IF . expression THEN stmt else_clause
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 97
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+
+
+state 46
+
+  102 repeat_stmt: REPEAT . stmt_list UNTIL expression
+
+    error  shift, and go to state 27
+
+    error          [reduce using rule 76 (stmt_list)]
+    IF             reduce using rule 76 (stmt_list)
+    REPEAT         reduce using rule 76 (stmt_list)
+    UNTIL          reduce using rule 76 (stmt_list)
+    WHILE          reduce using rule 76 (stmt_list)
+    CASE           reduce using rule 76 (stmt_list)
+    FOR            reduce using rule 76 (stmt_list)
+    READ           reduce using rule 76 (stmt_list)
+    WRITE          reduce using rule 76 (stmt_list)
+    WRITELN        reduce using rule 76 (stmt_list)
+    TOKEN_BEGIN    reduce using rule 76 (stmt_list)
+    GOTO           reduce using rule 76 (stmt_list)
+    TOKEN_ID       reduce using rule 76 (stmt_list)
+    TOKEN_INTEGER  reduce using rule 76 (stmt_list)
+
+    stmt_list  go to state 101
+
+
+state 47
+
+  103 while_stmt: WHILE . expression DO stmt
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 102
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+
+
+state 48
+
+  106 case_stmt: CASE . expression OF case_expr_list END
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 103
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+
+
+state 49
+
+  104 for_stmt: FOR . ID ASSIGN expression TO expression DO stmt
+  105         | FOR . ID ASSIGN expression DOWNTO expression DO stmt
+
+    TOKEN_ID  shift, and go to state 6
+
+    ID  go to state 104
+
+
+state 50
+
+   94 proc_stmt: READ . LP factor RP
+
+    LP  shift, and go to state 105
+
+
+state 51
+
+   95 proc_stmt: WRITE .
+   96          | WRITE . LP expression_list RP
+
+    LP  shift, and go to state 106
+
+    $default  reduce using rule 95 (proc_stmt)
+
+
+state 52
+
+   97 proc_stmt: WRITELN .
+   98          | WRITELN . LP expression_list RP
+
+    LP  shift, and go to state 107
+
+    $default  reduce using rule 97 (proc_stmt)
+
+
+state 53
+
+   73 compound_stmt: TOKEN_BEGIN stmt_list END .
+
+    $default  reduce using rule 73 (compound_stmt)
+
+
+state 54
+
+  111 goto_stmt: GOTO . INTEGER
+
+    TOKEN_INTEGER  shift, and go to state 37
+
+    INTEGER  go to state 108
+
+
+state 55
+
+   78 stmt: INTEGER . COLON non_label_stmt
+
+    COLON  shift, and go to state 109
+
+
+state 56
+
+   89 assign_stmt: ID . ASSIGN expression
+   90            | ID . LB expression RB ASSIGN expression
+   91            | ID . DOT ID ASSIGN expression
+   92 proc_stmt: ID .
+   93          | ID . LP args_list RP
+
+    ASSIGN  shift, and go to state 110
+    LB      shift, and go to state 111
+    DOT     shift, and go to state 112
+    LP      shift, and go to state 113
+
+    $default  reduce using rule 92 (proc_stmt)
+
+
+state 57
+
+   82 non_label_stmt: compound_stmt .
+
+    $default  reduce using rule 82 (non_label_stmt)
+
+
+state 58
+
+   77 stmt_list: stmt_list stmt . SEMI
+
+    SEMI  shift, and go to state 114
+
+
+state 59
+
+   79 stmt: non_label_stmt .
+
+    $default  reduce using rule 79 (stmt)
+
+
+state 60
+
+   80 non_label_stmt: assign_stmt .
+
+    $default  reduce using rule 80 (non_label_stmt)
+
+
+state 61
+
+   81 non_label_stmt: proc_stmt .
+
+    $default  reduce using rule 81 (non_label_stmt)
+
+
+state 62
+
+   83 non_label_stmt: if_stmt .
+
+    $default  reduce using rule 83 (non_label_stmt)
+
+
+state 63
+
+   84 non_label_stmt: repeat_stmt .
+
+    $default  reduce using rule 84 (non_label_stmt)
+
+
+state 64
+
+   85 non_label_stmt: while_stmt .
+
+    $default  reduce using rule 85 (non_label_stmt)
+
+
+state 65
+
+   86 non_label_stmt: for_stmt .
+
+    $default  reduce using rule 86 (non_label_stmt)
+
+
+state 66
+
+   87 non_label_stmt: case_stmt .
+
+    $default  reduce using rule 87 (non_label_stmt)
+
+
+state 67
+
+   88 non_label_stmt: goto_stmt .
+
+    $default  reduce using rule 88 (non_label_stmt)
+
+
+state 68
+
+   24 type_decl_list: type_decl_list type_definition .
+
+    $default  reduce using rule 24 (type_decl_list)
+
+
+state 69
+
+   26 type_definition: ID EQUAL . type_decl SEMI
+
+    MINUS          shift, and go to state 115
+    LP             shift, and go to state 116
+    INTEGER_TYPE   shift, and go to state 117
+    BOOLEAN_TYPE   shift, and go to state 118
+    CHAR_TYPE      shift, and go to state 119
+    REAL_TYPE      shift, and go to state 120
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    ARRAY          shift, and go to state 121
+    RECORD         shift, and go to state 122
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+
+    const_value       go to state 123
+    type_decl         go to state 124
+    simple_type_decl  go to state 125
+    array_type_decl   go to state 126
+    record_type_decl  go to state 127
+    INTEGER           go to state 42
+    ID                go to state 128
+
+
+state 70
+
+   45 name_list: name_list . COMMA ID
+   51 var_decl: name_list . COLON type_decl SEMI
+
+    COMMA  shift, and go to state 129
+    COLON  shift, and go to state 130
+
+
+state 71
+
+   47 var_part: VAR var_decl_list .
+   49 var_decl_list: var_decl_list . var_decl
+
+    TOKEN_ID  shift, and go to state 6
+
+    $default  reduce using rule 47 (var_part)
+
+    name_list  go to state 70
+    var_decl   go to state 131
+    ID         go to state 73
+
+
+state 72
+
+   50 var_decl_list: var_decl .
+
+    $default  reduce using rule 50 (var_decl_list)
+
+
+state 73
+
+   46 name_list: ID .
+
+    $default  reduce using rule 46 (name_list)
+
+
+state 74
+
+   52 routine_part: error . SEMI
+   58 function_decl: error . SEMI
+
+    SEMI  shift, and go to state 132
+
+
+state 75
+
+   60 function_head: FUNCTION . ID parameters COLON simple_type_decl
+
+    TOKEN_ID  shift, and go to state 6
+
+    ID  go to state 133
+
+
+state 76
+
+   62 procedure_head: PROCEDURE . ID parameters
+
+    TOKEN_ID  shift, and go to state 6
+
+    ID  go to state 134
+
+
+state 77
+
+    9 routine_head: const_part type_part var_part routine_part .
+   54 routine_part: routine_part . function_decl
+   55             | routine_part . procedure_decl
+
+    error      shift, and go to state 135
+    FUNCTION   shift, and go to state 75
+    PROCEDURE  shift, and go to state 76
+
+    TOKEN_BEGIN  reduce using rule 9 (routine_head)
+
+    function_decl   go to state 136
+    function_head   go to state 79
+    procedure_decl  go to state 137
+    procedure_head  go to state 81
+
+
+state 78
+
+   56 routine_part: function_decl .
+
+    $default  reduce using rule 56 (routine_part)
+
+
+state 79
+
+   59 function_decl: function_head . SEMI sub_routine SEMI
+
+    SEMI  shift, and go to state 138
+
+
+state 80
+
+   57 routine_part: procedure_decl .
+
+    $default  reduce using rule 57 (routine_part)
+
+
+state 81
+
+   61 procedure_decl: procedure_head . SEMI sub_routine SEMI
+
+    SEMI  shift, and go to state 139
+
+
+state 82
+
+   14 const_expr: ID EQUAL const_value SEMI .
+
+    $default  reduce using rule 14 (const_expr)
+
+
+state 83
+
+   75 stmt_list: stmt_list error SEMI .
+
+    $default  reduce using rule 75 (stmt_list)
+
+
+state 84
+
+  143 factor: MINUS . factor
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    factor       go to state 140
+
+
+state 85
+
+  142 factor: NOT . factor
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    factor       go to state 141
+
+
+state 86
+
+  141 factor: LP . expression RP
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 142
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+
+
+state 87
+
+  131 factor: ABS .
+  146       | ABS . LP args_list RP
+
+    LP  shift, and go to state 143
+
+    $default  reduce using rule 131 (factor)
+
+
+state 88
+
+  132 factor: CHR .
+  147       | CHR . LP args_list RP
+
+    LP  shift, and go to state 144
+
+    $default  reduce using rule 132 (factor)
+
+
+state 89
+
+  133 factor: ODD .
+  148       | ODD . LP args_list RP
+
+    LP  shift, and go to state 145
+
+    $default  reduce using rule 133 (factor)
+
+
+state 90
+
+  134 factor: ORD .
+  149       | ORD . LP args_list RP
+
+    LP  shift, and go to state 146
+
+    $default  reduce using rule 134 (factor)
+
+
+state 91
+
+  135 factor: PRED .
+  150       | PRED . LP args_list RP
+
+    LP  shift, and go to state 147
+
+    $default  reduce using rule 135 (factor)
+
+
+state 92
+
+  136 factor: SQR .
+  151       | SQR . LP args_list RP
+
+    LP  shift, and go to state 148
+
+    $default  reduce using rule 136 (factor)
+
+
+state 93
+
+  137 factor: SQRT .
+  152       | SQRT . LP args_list RP
+
+    LP  shift, and go to state 149
+
+    $default  reduce using rule 137 (factor)
+
+
+state 94
+
+  138 factor: SUCC .
+  153       | SUCC . LP args_list RP
+
+    LP  shift, and go to state 150
+
+    $default  reduce using rule 138 (factor)
+
+
+state 95
+
+  140 factor: const_value .
+
+    $default  reduce using rule 140 (factor)
+
+
+state 96
+
+  130 factor: ID .
+  139       | ID . LP args_list RP
+  144       | ID . LB expression RB
+  145       | ID . DOT ID
+
+    LB   shift, and go to state 151
+    DOT  shift, and go to state 152
+    LP   shift, and go to state 153
+
+    $default  reduce using rule 130 (factor)
+
+
+state 97
+
+   99 if_stmt: IF expression . THEN stmt else_clause
+  114 expression: expression . GE expr
+  115           | expression . GT expr
+  116           | expression . LE expr
+  117           | expression . LT expr
+  118           | expression . EQUAL expr
+  119           | expression . UNEQUAL expr
+
+    THEN     shift, and go to state 154
+    EQUAL    shift, and go to state 155
+    UNEQUAL  shift, and go to state 156
+    GE       shift, and go to state 157
+    GT       shift, and go to state 158
+    LE       shift, and go to state 159
+    LT       shift, and go to state 160
+
+
+state 98
+
+  120 expression: expr .
+  121 expr: expr . PLUS term
+  122     | expr . MINUS term
+  123     | expr . OR term
+
+    PLUS   shift, and go to state 161
+    MINUS  shift, and go to state 162
+    OR     shift, and go to state 163
+
+    $default  reduce using rule 120 (expression)
+
+
+state 99
+
+  124 expr: term .
+  125 term: term . MUL factor
+  126     | term . DIV factor
+  127     | term . MOD factor
+  128     | term . AND factor
+
+    MUL  shift, and go to state 164
+    DIV  shift, and go to state 165
+    AND  shift, and go to state 166
+    MOD  shift, and go to state 167
+
+    $default  reduce using rule 124 (expr)
+
+
+state 100
+
+  129 term: factor .
+
+    $default  reduce using rule 129 (term)
+
+
+state 101
+
+   75 stmt_list: stmt_list . error SEMI
+   77          | stmt_list . stmt SEMI
+  102 repeat_stmt: REPEAT stmt_list . UNTIL expression
+
+    error          shift, and go to state 44
+    IF             shift, and go to state 45
+    REPEAT         shift, and go to state 46
+    UNTIL          shift, and go to state 168
+    WHILE          shift, and go to state 47
+    CASE           shift, and go to state 48
+    FOR            shift, and go to state 49
+    READ           shift, and go to state 50
+    WRITE          shift, and go to state 51
+    WRITELN        shift, and go to state 52
+    TOKEN_BEGIN    shift, and go to state 20
+    GOTO           shift, and go to state 54
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+
+    INTEGER         go to state 55
+    ID              go to state 56
+    compound_stmt   go to state 57
+    stmt            go to state 58
+    non_label_stmt  go to state 59
+    assign_stmt     go to state 60
+    proc_stmt       go to state 61
+    if_stmt         go to state 62
+    repeat_stmt     go to state 63
+    while_stmt      go to state 64
+    for_stmt        go to state 65
+    case_stmt       go to state 66
+    goto_stmt       go to state 67
+
+
+state 102
+
+  103 while_stmt: WHILE expression . DO stmt
+  114 expression: expression . GE expr
+  115           | expression . GT expr
+  116           | expression . LE expr
+  117           | expression . LT expr
+  118           | expression . EQUAL expr
+  119           | expression . UNEQUAL expr
+
+    DO       shift, and go to state 169
+    EQUAL    shift, and go to state 155
+    UNEQUAL  shift, and go to state 156
+    GE       shift, and go to state 157
+    GT       shift, and go to state 158
+    LE       shift, and go to state 159
+    LT       shift, and go to state 160
+
+
+state 103
+
+  106 case_stmt: CASE expression . OF case_expr_list END
+  114 expression: expression . GE expr
+  115           | expression . GT expr
+  116           | expression . LE expr
+  117           | expression . LT expr
+  118           | expression . EQUAL expr
+  119           | expression . UNEQUAL expr
+
+    EQUAL    shift, and go to state 155
+    UNEQUAL  shift, and go to state 156
+    GE       shift, and go to state 157
+    GT       shift, and go to state 158
+    LE       shift, and go to state 159
+    LT       shift, and go to state 160
+    OF       shift, and go to state 170
+
+
+state 104
+
+  104 for_stmt: FOR ID . ASSIGN expression TO expression DO stmt
+  105         | FOR ID . ASSIGN expression DOWNTO expression DO stmt
+
+    ASSIGN  shift, and go to state 171
+
+
+state 105
+
+   94 proc_stmt: READ LP . factor RP
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    factor       go to state 172
+
+
+state 106
+
+   96 proc_stmt: WRITE LP . expression_list RP
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value      go to state 95
+    INTEGER          go to state 42
+    ID               go to state 96
+    expression_list  go to state 173
+    expression       go to state 174
+    expr             go to state 98
+    term             go to state 99
+    factor           go to state 100
+
+
+state 107
+
+   98 proc_stmt: WRITELN LP . expression_list RP
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value      go to state 95
+    INTEGER          go to state 42
+    ID               go to state 96
+    expression_list  go to state 175
+    expression       go to state 174
+    expr             go to state 98
+    term             go to state 99
+    factor           go to state 100
+
+
+state 108
+
+  111 goto_stmt: GOTO INTEGER .
+
+    $default  reduce using rule 111 (goto_stmt)
+
+
+state 109
+
+   78 stmt: INTEGER COLON . non_label_stmt
+
+    IF           shift, and go to state 45
+    REPEAT       shift, and go to state 46
+    WHILE        shift, and go to state 47
+    CASE         shift, and go to state 48
+    FOR          shift, and go to state 49
+    READ         shift, and go to state 50
+    WRITE        shift, and go to state 51
+    WRITELN      shift, and go to state 52
+    TOKEN_BEGIN  shift, and go to state 20
+    GOTO         shift, and go to state 54
+    TOKEN_ID     shift, and go to state 6
+
+    ID              go to state 56
+    compound_stmt   go to state 57
+    non_label_stmt  go to state 176
+    assign_stmt     go to state 60
+    proc_stmt       go to state 61
+    if_stmt         go to state 62
+    repeat_stmt     go to state 63
+    while_stmt      go to state 64
+    for_stmt        go to state 65
+    case_stmt       go to state 66
+    goto_stmt       go to state 67
+
+
+state 110
+
+   89 assign_stmt: ID ASSIGN . expression
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 177
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+
+
+state 111
+
+   90 assign_stmt: ID LB . expression RB ASSIGN expression
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 178
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+
+
+state 112
+
+   91 assign_stmt: ID DOT . ID ASSIGN expression
+
+    TOKEN_ID  shift, and go to state 6
+
+    ID  go to state 179
+
+
+state 113
+
+   93 proc_stmt: ID LP . args_list RP
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 180
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+    args_list    go to state 181
+
+
+state 114
+
+   77 stmt_list: stmt_list stmt SEMI .
+
+    $default  reduce using rule 77 (stmt_list)
+
+
+state 115
+
+   33 simple_type_decl: MINUS . const_value DOTDOT const_value
+   34                 | MINUS . const_value DOTDOT MINUS const_value
+
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+
+    const_value  go to state 182
+    INTEGER      go to state 42
+
+
+state 116
+
+   31 simple_type_decl: LP . name_list RP
+
+    TOKEN_ID  shift, and go to state 6
+
+    name_list  go to state 183
+    ID         go to state 73
+
+
+state 117
+
+   36 simple_type_decl: INTEGER_TYPE .
+
+    $default  reduce using rule 36 (simple_type_decl)
+
+
+state 118
+
+   37 simple_type_decl: BOOLEAN_TYPE .
+
+    $default  reduce using rule 37 (simple_type_decl)
+
+
+state 119
+
+   39 simple_type_decl: CHAR_TYPE .
+
+    $default  reduce using rule 39 (simple_type_decl)
+
+
+state 120
+
+   38 simple_type_decl: REAL_TYPE .
+
+    $default  reduce using rule 38 (simple_type_decl)
+
+
+state 121
+
+   40 array_type_decl: ARRAY . LB simple_type_decl RB OF type_decl
+
+    LB  shift, and go to state 184
+
+
+state 122
+
+   41 record_type_decl: RECORD . field_decl_list END
+
+    TOKEN_ID  shift, and go to state 6
+
+    field_decl_list  go to state 185
+    field_decl       go to state 186
+    name_list        go to state 187
+    ID               go to state 73
+
+
+state 123
+
+   32 simple_type_decl: const_value . DOTDOT const_value
+
+    DOTDOT  shift, and go to state 188
+
+
+state 124
+
+   26 type_definition: ID EQUAL type_decl . SEMI
+
+    SEMI  shift, and go to state 189
+
+
+state 125
+
+   27 type_decl: simple_type_decl .
+
+    $default  reduce using rule 27 (type_decl)
+
+
+state 126
+
+   28 type_decl: array_type_decl .
+
+    $default  reduce using rule 28 (type_decl)
+
+
+state 127
+
+   29 type_decl: record_type_decl .
+
+    $default  reduce using rule 29 (type_decl)
+
+
+state 128
+
+   30 simple_type_decl: ID .
+   35                 | ID . DOTDOT ID
+
+    DOTDOT  shift, and go to state 190
+
+    $default  reduce using rule 30 (simple_type_decl)
+
+
+state 129
+
+   45 name_list: name_list COMMA . ID
+
+    TOKEN_ID  shift, and go to state 6
+
+    ID  go to state 191
+
+
+state 130
+
+   51 var_decl: name_list COLON . type_decl SEMI
+
+    MINUS          shift, and go to state 115
+    LP             shift, and go to state 116
+    INTEGER_TYPE   shift, and go to state 117
+    BOOLEAN_TYPE   shift, and go to state 118
+    CHAR_TYPE      shift, and go to state 119
+    REAL_TYPE      shift, and go to state 120
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    ARRAY          shift, and go to state 121
+    RECORD         shift, and go to state 122
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+
+    const_value       go to state 123
+    type_decl         go to state 192
+    simple_type_decl  go to state 125
+    array_type_decl   go to state 126
+    record_type_decl  go to state 127
+    INTEGER           go to state 42
+    ID                go to state 128
+
+
+state 131
+
+   49 var_decl_list: var_decl_list var_decl .
+
+    $default  reduce using rule 49 (var_decl_list)
+
+
+state 132
+
+   52 routine_part: error SEMI .
+   58 function_decl: error SEMI .
+
+    error        reduce using rule 52 (routine_part)
+    error        [reduce using rule 58 (function_decl)]
+    FUNCTION     reduce using rule 52 (routine_part)
+    FUNCTION     [reduce using rule 58 (function_decl)]
+    PROCEDURE    reduce using rule 52 (routine_part)
+    PROCEDURE    [reduce using rule 58 (function_decl)]
+    TOKEN_BEGIN  reduce using rule 52 (routine_part)
+    TOKEN_BEGIN  [reduce using rule 58 (function_decl)]
+    $default     reduce using rule 52 (routine_part)
+
+
+state 133
+
+   60 function_head: FUNCTION ID . parameters COLON simple_type_decl
+
+    LP  shift, and go to state 193
+
+    $default  reduce using rule 63 (parameters)
+
+    parameters  go to state 194
+
+
+state 134
+
+   62 procedure_head: PROCEDURE ID . parameters
+
+    LP  shift, and go to state 193
+
+    $default  reduce using rule 63 (parameters)
+
+    parameters  go to state 195
+
+
+state 135
+
+   58 function_decl: error . SEMI
+
+    SEMI  shift, and go to state 196
+
+
+state 136
+
+   54 routine_part: routine_part function_decl .
+
+    $default  reduce using rule 54 (routine_part)
+
+
+state 137
+
+   55 routine_part: routine_part procedure_decl .
+
+    $default  reduce using rule 55 (routine_part)
+
+
+state 138
+
+   59 function_decl: function_head SEMI . sub_routine SEMI
+
+    error  shift, and go to state 197
+    CONST  shift, and go to state 10
+
+    error        [reduce using rule 11 (const_part)]
+    FUNCTION     reduce using rule 11 (const_part)
+    PROCEDURE    reduce using rule 11 (const_part)
+    TYPE         reduce using rule 11 (const_part)
+    VAR          reduce using rule 11 (const_part)
+    TOKEN_BEGIN  reduce using rule 11 (const_part)
+
+    sub_routine   go to state 198
+    routine_head  go to state 199
+    const_part    go to state 13
+
+
+state 139
+
+   61 procedure_decl: procedure_head SEMI . sub_routine SEMI
+
+    error  shift, and go to state 197
+    CONST  shift, and go to state 10
+
+    error        [reduce using rule 11 (const_part)]
+    FUNCTION     reduce using rule 11 (const_part)
+    PROCEDURE    reduce using rule 11 (const_part)
+    TYPE         reduce using rule 11 (const_part)
+    VAR          reduce using rule 11 (const_part)
+    TOKEN_BEGIN  reduce using rule 11 (const_part)
+
+    sub_routine   go to state 200
+    routine_head  go to state 199
+    const_part    go to state 13
+
+
+state 140
+
+  143 factor: MINUS factor .
+
+    $default  reduce using rule 143 (factor)
+
+
+state 141
+
+  142 factor: NOT factor .
+
+    $default  reduce using rule 142 (factor)
+
+
+state 142
+
+  114 expression: expression . GE expr
+  115           | expression . GT expr
+  116           | expression . LE expr
+  117           | expression . LT expr
+  118           | expression . EQUAL expr
+  119           | expression . UNEQUAL expr
+  141 factor: LP expression . RP
+
+    EQUAL    shift, and go to state 155
+    UNEQUAL  shift, and go to state 156
+    GE       shift, and go to state 157
+    GT       shift, and go to state 158
+    LE       shift, and go to state 159
+    LT       shift, and go to state 160
+    RP       shift, and go to state 201
+
+
+state 143
+
+  146 factor: ABS LP . args_list RP
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 180
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+    args_list    go to state 202
+
+
+state 144
+
+  147 factor: CHR LP . args_list RP
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 180
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+    args_list    go to state 203
+
+
+state 145
+
+  148 factor: ODD LP . args_list RP
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 180
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+    args_list    go to state 204
+
+
+state 146
+
+  149 factor: ORD LP . args_list RP
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 180
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+    args_list    go to state 205
+
+
+state 147
+
+  150 factor: PRED LP . args_list RP
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 180
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+    args_list    go to state 206
+
+
+state 148
+
+  151 factor: SQR LP . args_list RP
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 180
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+    args_list    go to state 207
+
+
+state 149
+
+  152 factor: SQRT LP . args_list RP
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 180
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+    args_list    go to state 208
+
+
+state 150
+
+  153 factor: SUCC LP . args_list RP
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 180
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+    args_list    go to state 209
+
+
+state 151
+
+  144 factor: ID LB . expression RB
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 210
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+
+
+state 152
+
+  145 factor: ID DOT . ID
+
+    TOKEN_ID  shift, and go to state 6
+
+    ID  go to state 211
+
+
+state 153
+
+  139 factor: ID LP . args_list RP
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 180
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+    args_list    go to state 212
+
+
+state 154
+
+   99 if_stmt: IF expression THEN . stmt else_clause
+
+    IF             shift, and go to state 45
+    REPEAT         shift, and go to state 46
+    WHILE          shift, and go to state 47
+    CASE           shift, and go to state 48
+    FOR            shift, and go to state 49
+    READ           shift, and go to state 50
+    WRITE          shift, and go to state 51
+    WRITELN        shift, and go to state 52
+    TOKEN_BEGIN    shift, and go to state 20
+    GOTO           shift, and go to state 54
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+
+    INTEGER         go to state 55
+    ID              go to state 56
+    compound_stmt   go to state 57
+    stmt            go to state 213
+    non_label_stmt  go to state 59
+    assign_stmt     go to state 60
+    proc_stmt       go to state 61
+    if_stmt         go to state 62
+    repeat_stmt     go to state 63
+    while_stmt      go to state 64
+    for_stmt        go to state 65
+    case_stmt       go to state 66
+    goto_stmt       go to state 67
+
+
+state 155
+
+  118 expression: expression EQUAL . expr
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expr         go to state 214
+    term         go to state 99
+    factor       go to state 100
+
+
+state 156
+
+  119 expression: expression UNEQUAL . expr
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expr         go to state 215
+    term         go to state 99
+    factor       go to state 100
+
+
+state 157
+
+  114 expression: expression GE . expr
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expr         go to state 216
+    term         go to state 99
+    factor       go to state 100
+
+
+state 158
+
+  115 expression: expression GT . expr
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expr         go to state 217
+    term         go to state 99
+    factor       go to state 100
+
+
+state 159
+
+  116 expression: expression LE . expr
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expr         go to state 218
+    term         go to state 99
+    factor       go to state 100
+
+
+state 160
+
+  117 expression: expression LT . expr
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expr         go to state 219
+    term         go to state 99
+    factor       go to state 100
+
+
+state 161
+
+  121 expr: expr PLUS . term
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    term         go to state 220
+    factor       go to state 100
+
+
+state 162
+
+  122 expr: expr MINUS . term
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    term         go to state 221
+    factor       go to state 100
+
+
+state 163
+
+  123 expr: expr OR . term
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    term         go to state 222
+    factor       go to state 100
+
+
+state 164
+
+  125 term: term MUL . factor
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    factor       go to state 223
+
+
+state 165
+
+  126 term: term DIV . factor
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    factor       go to state 224
+
+
+state 166
+
+  128 term: term AND . factor
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    factor       go to state 225
+
+
+state 167
+
+  127 term: term MOD . factor
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    factor       go to state 226
+
+
+state 168
+
+  102 repeat_stmt: REPEAT stmt_list UNTIL . expression
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 227
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+
+
+state 169
+
+  103 while_stmt: WHILE expression DO . stmt
+
+    IF             shift, and go to state 45
+    REPEAT         shift, and go to state 46
+    WHILE          shift, and go to state 47
+    CASE           shift, and go to state 48
+    FOR            shift, and go to state 49
+    READ           shift, and go to state 50
+    WRITE          shift, and go to state 51
+    WRITELN        shift, and go to state 52
+    TOKEN_BEGIN    shift, and go to state 20
+    GOTO           shift, and go to state 54
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+
+    INTEGER         go to state 55
+    ID              go to state 56
+    compound_stmt   go to state 57
+    stmt            go to state 228
+    non_label_stmt  go to state 59
+    assign_stmt     go to state 60
+    proc_stmt       go to state 61
+    if_stmt         go to state 62
+    repeat_stmt     go to state 63
+    while_stmt      go to state 64
+    for_stmt        go to state 65
+    case_stmt       go to state 66
+    goto_stmt       go to state 67
+
+
+state 170
+
+  106 case_stmt: CASE expression OF . case_expr_list END
+
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+
+    const_value     go to state 229
+    INTEGER         go to state 42
+    ID              go to state 230
+    case_expr_list  go to state 231
+    case_expr       go to state 232
+
+
+state 171
+
+  104 for_stmt: FOR ID ASSIGN . expression TO expression DO stmt
+  105         | FOR ID ASSIGN . expression DOWNTO expression DO stmt
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 233
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+
+
+state 172
+
+   94 proc_stmt: READ LP factor . RP
+
+    RP  shift, and go to state 234
+
+
+state 173
+
+   96 proc_stmt: WRITE LP expression_list . RP
+  112 expression_list: expression_list . COMMA expression
+
+    RP     shift, and go to state 235
+    COMMA  shift, and go to state 236
+
+
+state 174
+
+  113 expression_list: expression .
+  114 expression: expression . GE expr
+  115           | expression . GT expr
+  116           | expression . LE expr
+  117           | expression . LT expr
+  118           | expression . EQUAL expr
+  119           | expression . UNEQUAL expr
+
+    EQUAL    shift, and go to state 155
+    UNEQUAL  shift, and go to state 156
+    GE       shift, and go to state 157
+    GT       shift, and go to state 158
+    LE       shift, and go to state 159
+    LT       shift, and go to state 160
+
+    $default  reduce using rule 113 (expression_list)
+
+
+state 175
+
+   98 proc_stmt: WRITELN LP expression_list . RP
+  112 expression_list: expression_list . COMMA expression
+
+    RP     shift, and go to state 237
+    COMMA  shift, and go to state 236
+
+
+state 176
+
+   78 stmt: INTEGER COLON non_label_stmt .
+
+    $default  reduce using rule 78 (stmt)
+
+
+state 177
+
+   89 assign_stmt: ID ASSIGN expression .
+  114 expression: expression . GE expr
+  115           | expression . GT expr
+  116           | expression . LE expr
+  117           | expression . LT expr
+  118           | expression . EQUAL expr
+  119           | expression . UNEQUAL expr
+
+    EQUAL    shift, and go to state 155
+    UNEQUAL  shift, and go to state 156
+    GE       shift, and go to state 157
+    GT       shift, and go to state 158
+    LE       shift, and go to state 159
+    LT       shift, and go to state 160
+
+    $default  reduce using rule 89 (assign_stmt)
+
+
+state 178
+
+   90 assign_stmt: ID LB expression . RB ASSIGN expression
+  114 expression: expression . GE expr
+  115           | expression . GT expr
+  116           | expression . LE expr
+  117           | expression . LT expr
+  118           | expression . EQUAL expr
+  119           | expression . UNEQUAL expr
+
+    EQUAL    shift, and go to state 155
+    UNEQUAL  shift, and go to state 156
+    GE       shift, and go to state 157
+    GT       shift, and go to state 158
+    LE       shift, and go to state 159
+    LT       shift, and go to state 160
+    RB       shift, and go to state 238
+
+
+state 179
+
+   91 assign_stmt: ID DOT ID . ASSIGN expression
+
+    ASSIGN  shift, and go to state 239
+
+
+state 180
+
+  114 expression: expression . GE expr
+  115           | expression . GT expr
+  116           | expression . LE expr
+  117           | expression . LT expr
+  118           | expression . EQUAL expr
+  119           | expression . UNEQUAL expr
+  155 args_list: expression .
+
+    EQUAL    shift, and go to state 155
+    UNEQUAL  shift, and go to state 156
+    GE       shift, and go to state 157
+    GT       shift, and go to state 158
+    LE       shift, and go to state 159
+    LT       shift, and go to state 160
+
+    $default  reduce using rule 155 (args_list)
+
+
+state 181
+
+   93 proc_stmt: ID LP args_list . RP
+  154 args_list: args_list . COMMA expression
+
+    RP     shift, and go to state 240
+    COMMA  shift, and go to state 241
+
+
+state 182
+
+   33 simple_type_decl: MINUS const_value . DOTDOT const_value
+   34                 | MINUS const_value . DOTDOT MINUS const_value
+
+    DOTDOT  shift, and go to state 242
+
+
+state 183
+
+   31 simple_type_decl: LP name_list . RP
+   45 name_list: name_list . COMMA ID
+
+    RP     shift, and go to state 243
+    COMMA  shift, and go to state 129
+
+
+state 184
+
+   40 array_type_decl: ARRAY LB . simple_type_decl RB OF type_decl
+
+    MINUS          shift, and go to state 115
+    LP             shift, and go to state 116
+    INTEGER_TYPE   shift, and go to state 117
+    BOOLEAN_TYPE   shift, and go to state 118
+    CHAR_TYPE      shift, and go to state 119
+    REAL_TYPE      shift, and go to state 120
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+
+    const_value       go to state 123
+    simple_type_decl  go to state 244
+    INTEGER           go to state 42
+    ID                go to state 128
+
+
+state 185
+
+   41 record_type_decl: RECORD field_decl_list . END
+   42 field_decl_list: field_decl_list . field_decl
+
+    END       shift, and go to state 245
+    TOKEN_ID  shift, and go to state 6
+
+    field_decl  go to state 246
+    name_list   go to state 187
+    ID          go to state 73
+
+
+state 186
+
+   43 field_decl_list: field_decl .
+
+    $default  reduce using rule 43 (field_decl_list)
+
+
+state 187
+
+   44 field_decl: name_list . COLON type_decl SEMI
+   45 name_list: name_list . COMMA ID
+
+    COMMA  shift, and go to state 129
+    COLON  shift, and go to state 247
+
+
+state 188
+
+   32 simple_type_decl: const_value DOTDOT . const_value
+
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+
+    const_value  go to state 248
+    INTEGER      go to state 42
+
+
+state 189
+
+   26 type_definition: ID EQUAL type_decl SEMI .
+
+    $default  reduce using rule 26 (type_definition)
+
+
+state 190
+
+   35 simple_type_decl: ID DOTDOT . ID
+
+    TOKEN_ID  shift, and go to state 6
+
+    ID  go to state 249
+
+
+state 191
+
+   45 name_list: name_list COMMA ID .
+
+    $default  reduce using rule 45 (name_list)
+
+
+state 192
+
+   51 var_decl: name_list COLON type_decl . SEMI
+
+    SEMI  shift, and go to state 250
+
+
+state 193
+
+   64 parameters: LP . para_decl_list RP
+
+    VAR       shift, and go to state 251
+    TOKEN_ID  shift, and go to state 6
+
+    name_list       go to state 252
+    para_decl_list  go to state 253
+    para_type_list  go to state 254
+    var_name_list   go to state 255
+    ID              go to state 73
+
+
+state 194
+
+   60 function_head: FUNCTION ID parameters . COLON simple_type_decl
+
+    COLON  shift, and go to state 256
+
+
+state 195
+
+   62 procedure_head: PROCEDURE ID parameters .
+
+    $default  reduce using rule 62 (procedure_head)
+
+
+state 196
+
+   58 function_decl: error SEMI .
+
+    $default  reduce using rule 58 (function_decl)
+
+
+state 197
+
+    6 sub_routine: error . SEMI
+    8 routine_head: error . SEMI
+
+    SEMI  shift, and go to state 257
+
+
+state 198
+
+   59 function_decl: function_head SEMI sub_routine . SEMI
+
+    SEMI  shift, and go to state 258
+
+
+state 199
+
+    7 sub_routine: routine_head . routine_body
+
+    TOKEN_BEGIN  shift, and go to state 20
+
+    routine_body   go to state 259
+    compound_stmt  go to state 22
+
+
+state 200
+
+   61 procedure_decl: procedure_head SEMI sub_routine . SEMI
+
+    SEMI  shift, and go to state 260
+
+
+state 201
+
+  141 factor: LP expression RP .
+
+    $default  reduce using rule 141 (factor)
+
+
+state 202
+
+  146 factor: ABS LP args_list . RP
+  154 args_list: args_list . COMMA expression
+
+    RP     shift, and go to state 261
+    COMMA  shift, and go to state 241
+
+
+state 203
+
+  147 factor: CHR LP args_list . RP
+  154 args_list: args_list . COMMA expression
+
+    RP     shift, and go to state 262
+    COMMA  shift, and go to state 241
+
+
+state 204
+
+  148 factor: ODD LP args_list . RP
+  154 args_list: args_list . COMMA expression
+
+    RP     shift, and go to state 263
+    COMMA  shift, and go to state 241
+
+
+state 205
+
+  149 factor: ORD LP args_list . RP
+  154 args_list: args_list . COMMA expression
+
+    RP     shift, and go to state 264
+    COMMA  shift, and go to state 241
+
+
+state 206
+
+  150 factor: PRED LP args_list . RP
+  154 args_list: args_list . COMMA expression
+
+    RP     shift, and go to state 265
+    COMMA  shift, and go to state 241
+
+
+state 207
+
+  151 factor: SQR LP args_list . RP
+  154 args_list: args_list . COMMA expression
+
+    RP     shift, and go to state 266
+    COMMA  shift, and go to state 241
+
+
+state 208
+
+  152 factor: SQRT LP args_list . RP
+  154 args_list: args_list . COMMA expression
+
+    RP     shift, and go to state 267
+    COMMA  shift, and go to state 241
+
+
+state 209
+
+  153 factor: SUCC LP args_list . RP
+  154 args_list: args_list . COMMA expression
+
+    RP     shift, and go to state 268
+    COMMA  shift, and go to state 241
+
+
+state 210
+
+  114 expression: expression . GE expr
+  115           | expression . GT expr
+  116           | expression . LE expr
+  117           | expression . LT expr
+  118           | expression . EQUAL expr
+  119           | expression . UNEQUAL expr
+  144 factor: ID LB expression . RB
+
+    EQUAL    shift, and go to state 155
+    UNEQUAL  shift, and go to state 156
+    GE       shift, and go to state 157
+    GT       shift, and go to state 158
+    LE       shift, and go to state 159
+    LT       shift, and go to state 160
+    RB       shift, and go to state 269
+
+
+state 211
+
+  145 factor: ID DOT ID .
+
+    $default  reduce using rule 145 (factor)
+
+
+state 212
+
+  139 factor: ID LP args_list . RP
+  154 args_list: args_list . COMMA expression
+
+    RP     shift, and go to state 270
+    COMMA  shift, and go to state 241
+
+
+state 213
+
+   99 if_stmt: IF expression THEN stmt . else_clause
+
+    ELSE  shift, and go to state 271
+
+    ELSE      [reduce using rule 100 (else_clause)]
+    $default  reduce using rule 100 (else_clause)
+
+    else_clause  go to state 272
+
+
+state 214
+
+  118 expression: expression EQUAL expr .
+  121 expr: expr . PLUS term
+  122     | expr . MINUS term
+  123     | expr . OR term
+
+    PLUS   shift, and go to state 161
+    MINUS  shift, and go to state 162
+    OR     shift, and go to state 163
+
+    $default  reduce using rule 118 (expression)
+
+
+state 215
+
+  119 expression: expression UNEQUAL expr .
+  121 expr: expr . PLUS term
+  122     | expr . MINUS term
+  123     | expr . OR term
+
+    PLUS   shift, and go to state 161
+    MINUS  shift, and go to state 162
+    OR     shift, and go to state 163
+
+    $default  reduce using rule 119 (expression)
+
+
+state 216
+
+  114 expression: expression GE expr .
+  121 expr: expr . PLUS term
+  122     | expr . MINUS term
+  123     | expr . OR term
+
+    PLUS   shift, and go to state 161
+    MINUS  shift, and go to state 162
+    OR     shift, and go to state 163
+
+    $default  reduce using rule 114 (expression)
+
+
+state 217
+
+  115 expression: expression GT expr .
+  121 expr: expr . PLUS term
+  122     | expr . MINUS term
+  123     | expr . OR term
+
+    PLUS   shift, and go to state 161
+    MINUS  shift, and go to state 162
+    OR     shift, and go to state 163
+
+    $default  reduce using rule 115 (expression)
+
+
+state 218
+
+  116 expression: expression LE expr .
+  121 expr: expr . PLUS term
+  122     | expr . MINUS term
+  123     | expr . OR term
+
+    PLUS   shift, and go to state 161
+    MINUS  shift, and go to state 162
+    OR     shift, and go to state 163
+
+    $default  reduce using rule 116 (expression)
+
+
+state 219
+
+  117 expression: expression LT expr .
+  121 expr: expr . PLUS term
+  122     | expr . MINUS term
+  123     | expr . OR term
+
+    PLUS   shift, and go to state 161
+    MINUS  shift, and go to state 162
+    OR     shift, and go to state 163
+
+    $default  reduce using rule 117 (expression)
+
+
+state 220
+
+  121 expr: expr PLUS term .
+  125 term: term . MUL factor
+  126     | term . DIV factor
+  127     | term . MOD factor
+  128     | term . AND factor
+
+    MUL  shift, and go to state 164
+    DIV  shift, and go to state 165
+    AND  shift, and go to state 166
+    MOD  shift, and go to state 167
+
+    $default  reduce using rule 121 (expr)
+
+
+state 221
+
+  122 expr: expr MINUS term .
+  125 term: term . MUL factor
+  126     | term . DIV factor
+  127     | term . MOD factor
+  128     | term . AND factor
+
+    MUL  shift, and go to state 164
+    DIV  shift, and go to state 165
+    AND  shift, and go to state 166
+    MOD  shift, and go to state 167
+
+    $default  reduce using rule 122 (expr)
+
+
+state 222
+
+  123 expr: expr OR term .
+  125 term: term . MUL factor
+  126     | term . DIV factor
+  127     | term . MOD factor
+  128     | term . AND factor
+
+    MUL  shift, and go to state 164
+    DIV  shift, and go to state 165
+    AND  shift, and go to state 166
+    MOD  shift, and go to state 167
+
+    $default  reduce using rule 123 (expr)
+
+
+state 223
+
+  125 term: term MUL factor .
+
+    $default  reduce using rule 125 (term)
+
+
+state 224
+
+  126 term: term DIV factor .
+
+    $default  reduce using rule 126 (term)
+
+
+state 225
+
+  128 term: term AND factor .
+
+    $default  reduce using rule 128 (term)
+
+
+state 226
+
+  127 term: term MOD factor .
+
+    $default  reduce using rule 127 (term)
+
+
+state 227
+
+  102 repeat_stmt: REPEAT stmt_list UNTIL expression .
+  114 expression: expression . GE expr
+  115           | expression . GT expr
+  116           | expression . LE expr
+  117           | expression . LT expr
+  118           | expression . EQUAL expr
+  119           | expression . UNEQUAL expr
+
+    EQUAL    shift, and go to state 155
+    UNEQUAL  shift, and go to state 156
+    GE       shift, and go to state 157
+    GT       shift, and go to state 158
+    LE       shift, and go to state 159
+    LT       shift, and go to state 160
+
+    $default  reduce using rule 102 (repeat_stmt)
+
+
+state 228
+
+  103 while_stmt: WHILE expression DO stmt .
+
+    $default  reduce using rule 103 (while_stmt)
+
+
+state 229
+
+  109 case_expr: const_value . COLON stmt SEMI
+
+    COLON  shift, and go to state 273
+
+
+state 230
+
+  110 case_expr: ID . COLON stmt SEMI
+
+    COLON  shift, and go to state 274
+
+
+state 231
+
+  106 case_stmt: CASE expression OF case_expr_list . END
+  107 case_expr_list: case_expr_list . case_expr
+
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    END            shift, and go to state 275
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+
+    const_value  go to state 229
+    INTEGER      go to state 42
+    ID           go to state 230
+    case_expr    go to state 276
+
+
+state 232
+
+  108 case_expr_list: case_expr .
+
+    $default  reduce using rule 108 (case_expr_list)
+
+
+state 233
+
+  104 for_stmt: FOR ID ASSIGN expression . TO expression DO stmt
+  105         | FOR ID ASSIGN expression . DOWNTO expression DO stmt
+  114 expression: expression . GE expr
+  115           | expression . GT expr
+  116           | expression . LE expr
+  117           | expression . LT expr
+  118           | expression . EQUAL expr
+  119           | expression . UNEQUAL expr
+
+    TO       shift, and go to state 277
+    DOWNTO   shift, and go to state 278
+    EQUAL    shift, and go to state 155
+    UNEQUAL  shift, and go to state 156
+    GE       shift, and go to state 157
+    GT       shift, and go to state 158
+    LE       shift, and go to state 159
+    LT       shift, and go to state 160
+
+
+state 234
+
+   94 proc_stmt: READ LP factor RP .
+
+    $default  reduce using rule 94 (proc_stmt)
+
+
+state 235
+
+   96 proc_stmt: WRITE LP expression_list RP .
+
+    $default  reduce using rule 96 (proc_stmt)
+
+
+state 236
+
+  112 expression_list: expression_list COMMA . expression
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 279
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+
+
+state 237
+
+   98 proc_stmt: WRITELN LP expression_list RP .
+
+    $default  reduce using rule 98 (proc_stmt)
+
+
+state 238
+
+   90 assign_stmt: ID LB expression RB . ASSIGN expression
+
+    ASSIGN  shift, and go to state 280
+
+
+state 239
+
+   91 assign_stmt: ID DOT ID ASSIGN . expression
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 281
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+
+
+state 240
+
+   93 proc_stmt: ID LP args_list RP .
+
+    $default  reduce using rule 93 (proc_stmt)
+
+
+state 241
+
+  154 args_list: args_list COMMA . expression
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 282
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+
+
+state 242
+
+   33 simple_type_decl: MINUS const_value DOTDOT . const_value
+   34                 | MINUS const_value DOTDOT . MINUS const_value
+
+    MINUS          shift, and go to state 283
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+
+    const_value  go to state 284
+    INTEGER      go to state 42
+
+
+state 243
+
+   31 simple_type_decl: LP name_list RP .
+
+    $default  reduce using rule 31 (simple_type_decl)
+
+
+state 244
+
+   40 array_type_decl: ARRAY LB simple_type_decl . RB OF type_decl
+
+    RB  shift, and go to state 285
+
+
+state 245
+
+   41 record_type_decl: RECORD field_decl_list END .
+
+    $default  reduce using rule 41 (record_type_decl)
+
+
+state 246
+
+   42 field_decl_list: field_decl_list field_decl .
+
+    $default  reduce using rule 42 (field_decl_list)
+
+
+state 247
+
+   44 field_decl: name_list COLON . type_decl SEMI
+
+    MINUS          shift, and go to state 115
+    LP             shift, and go to state 116
+    INTEGER_TYPE   shift, and go to state 117
+    BOOLEAN_TYPE   shift, and go to state 118
+    CHAR_TYPE      shift, and go to state 119
+    REAL_TYPE      shift, and go to state 120
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    ARRAY          shift, and go to state 121
+    RECORD         shift, and go to state 122
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+
+    const_value       go to state 123
+    type_decl         go to state 286
+    simple_type_decl  go to state 125
+    array_type_decl   go to state 126
+    record_type_decl  go to state 127
+    INTEGER           go to state 42
+    ID                go to state 128
+
+
+state 248
+
+   32 simple_type_decl: const_value DOTDOT const_value .
+
+    $default  reduce using rule 32 (simple_type_decl)
+
+
+state 249
+
+   35 simple_type_decl: ID DOTDOT ID .
+
+    $default  reduce using rule 35 (simple_type_decl)
+
+
+state 250
+
+   51 var_decl: name_list COLON type_decl SEMI .
+
+    $default  reduce using rule 51 (var_decl)
+
+
+state 251
+
+   68 var_name_list: VAR . name_list
+
+    TOKEN_ID  shift, and go to state 6
+
+    name_list  go to state 287
+    ID         go to state 73
+
+
+state 252
+
+   45 name_list: name_list . COMMA ID
+   69 var_name_list: name_list .
+
+    COMMA  shift, and go to state 129
+
+    $default  reduce using rule 69 (var_name_list)
+
+
+state 253
+
+   64 parameters: LP para_decl_list . RP
+   65 para_decl_list: para_decl_list . SEMI para_type_list
+
+    SEMI  shift, and go to state 288
+    RP    shift, and go to state 289
+
+
+state 254
+
+   66 para_decl_list: para_type_list .
+
+    $default  reduce using rule 66 (para_decl_list)
+
+
+state 255
+
+   67 para_type_list: var_name_list . COLON simple_type_decl
+
+    COLON  shift, and go to state 290
+
+
+state 256
+
+   60 function_head: FUNCTION ID parameters COLON . simple_type_decl
+
+    MINUS          shift, and go to state 115
+    LP             shift, and go to state 116
+    INTEGER_TYPE   shift, and go to state 117
+    BOOLEAN_TYPE   shift, and go to state 118
+    CHAR_TYPE      shift, and go to state 119
+    REAL_TYPE      shift, and go to state 120
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+
+    const_value       go to state 123
+    simple_type_decl  go to state 291
+    INTEGER           go to state 42
+    ID                go to state 128
+
+
+state 257
+
+    6 sub_routine: error SEMI .
+    8 routine_head: error SEMI .
+
+    TOKEN_BEGIN  reduce using rule 8 (routine_head)
+    $default     reduce using rule 6 (sub_routine)
+
+
+state 258
+
+   59 function_decl: function_head SEMI sub_routine SEMI .
+
+    $default  reduce using rule 59 (function_decl)
+
+
+state 259
+
+    7 sub_routine: routine_head routine_body .
+
+    $default  reduce using rule 7 (sub_routine)
+
+
+state 260
+
+   61 procedure_decl: procedure_head SEMI sub_routine SEMI .
+
+    $default  reduce using rule 61 (procedure_decl)
+
+
+state 261
+
+  146 factor: ABS LP args_list RP .
+
+    $default  reduce using rule 146 (factor)
+
+
+state 262
+
+  147 factor: CHR LP args_list RP .
+
+    $default  reduce using rule 147 (factor)
+
+
+state 263
+
+  148 factor: ODD LP args_list RP .
+
+    $default  reduce using rule 148 (factor)
+
+
+state 264
+
+  149 factor: ORD LP args_list RP .
+
+    $default  reduce using rule 149 (factor)
+
+
+state 265
+
+  150 factor: PRED LP args_list RP .
+
+    $default  reduce using rule 150 (factor)
+
+
+state 266
+
+  151 factor: SQR LP args_list RP .
+
+    $default  reduce using rule 151 (factor)
+
+
+state 267
+
+  152 factor: SQRT LP args_list RP .
+
+    $default  reduce using rule 152 (factor)
+
+
+state 268
+
+  153 factor: SUCC LP args_list RP .
+
+    $default  reduce using rule 153 (factor)
+
+
+state 269
+
+  144 factor: ID LB expression RB .
+
+    $default  reduce using rule 144 (factor)
+
+
+state 270
+
+  139 factor: ID LP args_list RP .
+
+    $default  reduce using rule 139 (factor)
+
+
+state 271
+
+  101 else_clause: ELSE . stmt
+
+    IF             shift, and go to state 45
+    REPEAT         shift, and go to state 46
+    WHILE          shift, and go to state 47
+    CASE           shift, and go to state 48
+    FOR            shift, and go to state 49
+    READ           shift, and go to state 50
+    WRITE          shift, and go to state 51
+    WRITELN        shift, and go to state 52
+    TOKEN_BEGIN    shift, and go to state 20
+    GOTO           shift, and go to state 54
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+
+    INTEGER         go to state 55
+    ID              go to state 56
+    compound_stmt   go to state 57
+    stmt            go to state 292
+    non_label_stmt  go to state 59
+    assign_stmt     go to state 60
+    proc_stmt       go to state 61
+    if_stmt         go to state 62
+    repeat_stmt     go to state 63
+    while_stmt      go to state 64
+    for_stmt        go to state 65
+    case_stmt       go to state 66
+    goto_stmt       go to state 67
+
+
+state 272
+
+   99 if_stmt: IF expression THEN stmt else_clause .
+
+    $default  reduce using rule 99 (if_stmt)
+
+
+state 273
+
+  109 case_expr: const_value COLON . stmt SEMI
+
+    IF             shift, and go to state 45
+    REPEAT         shift, and go to state 46
+    WHILE          shift, and go to state 47
+    CASE           shift, and go to state 48
+    FOR            shift, and go to state 49
+    READ           shift, and go to state 50
+    WRITE          shift, and go to state 51
+    WRITELN        shift, and go to state 52
+    TOKEN_BEGIN    shift, and go to state 20
+    GOTO           shift, and go to state 54
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+
+    INTEGER         go to state 55
+    ID              go to state 56
+    compound_stmt   go to state 57
+    stmt            go to state 293
+    non_label_stmt  go to state 59
+    assign_stmt     go to state 60
+    proc_stmt       go to state 61
+    if_stmt         go to state 62
+    repeat_stmt     go to state 63
+    while_stmt      go to state 64
+    for_stmt        go to state 65
+    case_stmt       go to state 66
+    goto_stmt       go to state 67
+
+
+state 274
+
+  110 case_expr: ID COLON . stmt SEMI
+
+    IF             shift, and go to state 45
+    REPEAT         shift, and go to state 46
+    WHILE          shift, and go to state 47
+    CASE           shift, and go to state 48
+    FOR            shift, and go to state 49
+    READ           shift, and go to state 50
+    WRITE          shift, and go to state 51
+    WRITELN        shift, and go to state 52
+    TOKEN_BEGIN    shift, and go to state 20
+    GOTO           shift, and go to state 54
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+
+    INTEGER         go to state 55
+    ID              go to state 56
+    compound_stmt   go to state 57
+    stmt            go to state 294
+    non_label_stmt  go to state 59
+    assign_stmt     go to state 60
+    proc_stmt       go to state 61
+    if_stmt         go to state 62
+    repeat_stmt     go to state 63
+    while_stmt      go to state 64
+    for_stmt        go to state 65
+    case_stmt       go to state 66
+    goto_stmt       go to state 67
+
+
+state 275
+
+  106 case_stmt: CASE expression OF case_expr_list END .
+
+    $default  reduce using rule 106 (case_stmt)
+
+
+state 276
+
+  107 case_expr_list: case_expr_list case_expr .
+
+    $default  reduce using rule 107 (case_expr_list)
+
+
+state 277
+
+  104 for_stmt: FOR ID ASSIGN expression TO . expression DO stmt
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 295
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+
+
+state 278
+
+  105 for_stmt: FOR ID ASSIGN expression DOWNTO . expression DO stmt
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 296
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+
+
+state 279
+
+  112 expression_list: expression_list COMMA expression .
+  114 expression: expression . GE expr
+  115           | expression . GT expr
+  116           | expression . LE expr
+  117           | expression . LT expr
+  118           | expression . EQUAL expr
+  119           | expression . UNEQUAL expr
+
+    EQUAL    shift, and go to state 155
+    UNEQUAL  shift, and go to state 156
+    GE       shift, and go to state 157
+    GT       shift, and go to state 158
+    LE       shift, and go to state 159
+    LT       shift, and go to state 160
+
+    $default  reduce using rule 112 (expression_list)
+
+
+state 280
+
+   90 assign_stmt: ID LB expression RB ASSIGN . expression
+
+    MINUS          shift, and go to state 84
+    NOT            shift, and go to state 85
+    LP             shift, and go to state 86
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+    ABS            shift, and go to state 87
+    CHR            shift, and go to state 88
+    ODD            shift, and go to state 89
+    ORD            shift, and go to state 90
+    PRED           shift, and go to state 91
+    SQR            shift, and go to state 92
+    SQRT           shift, and go to state 93
+    SUCC           shift, and go to state 94
+
+    const_value  go to state 95
+    INTEGER      go to state 42
+    ID           go to state 96
+    expression   go to state 297
+    expr         go to state 98
+    term         go to state 99
+    factor       go to state 100
+
+
+state 281
+
+   91 assign_stmt: ID DOT ID ASSIGN expression .
+  114 expression: expression . GE expr
+  115           | expression . GT expr
+  116           | expression . LE expr
+  117           | expression . LT expr
+  118           | expression . EQUAL expr
+  119           | expression . UNEQUAL expr
+
+    EQUAL    shift, and go to state 155
+    UNEQUAL  shift, and go to state 156
+    GE       shift, and go to state 157
+    GT       shift, and go to state 158
+    LE       shift, and go to state 159
+    LT       shift, and go to state 160
+
+    $default  reduce using rule 91 (assign_stmt)
+
+
+state 282
+
+  114 expression: expression . GE expr
+  115           | expression . GT expr
+  116           | expression . LE expr
+  117           | expression . LT expr
+  118           | expression . EQUAL expr
+  119           | expression . UNEQUAL expr
+  154 args_list: args_list COMMA expression .
+
+    EQUAL    shift, and go to state 155
+    UNEQUAL  shift, and go to state 156
+    GE       shift, and go to state 157
+    GT       shift, and go to state 158
+    LE       shift, and go to state 159
+    LT       shift, and go to state 160
+
+    $default  reduce using rule 154 (args_list)
+
+
+state 283
+
+   34 simple_type_decl: MINUS const_value DOTDOT MINUS . const_value
+
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+
+    const_value  go to state 298
+    INTEGER      go to state 42
+
+
+state 284
+
+   33 simple_type_decl: MINUS const_value DOTDOT const_value .
+
+    $default  reduce using rule 33 (simple_type_decl)
+
+
+state 285
+
+   40 array_type_decl: ARRAY LB simple_type_decl RB . OF type_decl
+
+    OF  shift, and go to state 299
+
+
+state 286
+
+   44 field_decl: name_list COLON type_decl . SEMI
+
+    SEMI  shift, and go to state 300
+
+
+state 287
+
+   45 name_list: name_list . COMMA ID
+   68 var_name_list: VAR name_list .
+
+    COMMA  shift, and go to state 129
+
+    $default  reduce using rule 68 (var_name_list)
+
+
+state 288
+
+   65 para_decl_list: para_decl_list SEMI . para_type_list
+
+    VAR       shift, and go to state 251
+    TOKEN_ID  shift, and go to state 6
+
+    name_list       go to state 252
+    para_type_list  go to state 301
+    var_name_list   go to state 255
+    ID              go to state 73
+
+
+state 289
+
+   64 parameters: LP para_decl_list RP .
+
+    $default  reduce using rule 64 (parameters)
+
+
+state 290
+
+   67 para_type_list: var_name_list COLON . simple_type_decl
+
+    MINUS          shift, and go to state 115
+    LP             shift, and go to state 116
+    INTEGER_TYPE   shift, and go to state 117
+    BOOLEAN_TYPE   shift, and go to state 118
+    CHAR_TYPE      shift, and go to state 119
+    REAL_TYPE      shift, and go to state 120
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+
+    const_value       go to state 123
+    simple_type_decl  go to state 302
+    INTEGER           go to state 42
+    ID                go to state 128
+
+
+state 291
+
+   60 function_head: FUNCTION ID parameters COLON simple_type_decl .
+
+    $default  reduce using rule 60 (function_head)
+
+
+state 292
+
+  101 else_clause: ELSE stmt .
+
+    $default  reduce using rule 101 (else_clause)
+
+
+state 293
+
+  109 case_expr: const_value COLON stmt . SEMI
+
+    SEMI  shift, and go to state 303
+
+
+state 294
+
+  110 case_expr: ID COLON stmt . SEMI
+
+    SEMI  shift, and go to state 304
+
+
+state 295
+
+  104 for_stmt: FOR ID ASSIGN expression TO expression . DO stmt
+  114 expression: expression . GE expr
+  115           | expression . GT expr
+  116           | expression . LE expr
+  117           | expression . LT expr
+  118           | expression . EQUAL expr
+  119           | expression . UNEQUAL expr
+
+    DO       shift, and go to state 305
+    EQUAL    shift, and go to state 155
+    UNEQUAL  shift, and go to state 156
+    GE       shift, and go to state 157
+    GT       shift, and go to state 158
+    LE       shift, and go to state 159
+    LT       shift, and go to state 160
+
+
+state 296
+
+  105 for_stmt: FOR ID ASSIGN expression DOWNTO expression . DO stmt
+  114 expression: expression . GE expr
+  115           | expression . GT expr
+  116           | expression . LE expr
+  117           | expression . LT expr
+  118           | expression . EQUAL expr
+  119           | expression . UNEQUAL expr
+
+    DO       shift, and go to state 306
+    EQUAL    shift, and go to state 155
+    UNEQUAL  shift, and go to state 156
+    GE       shift, and go to state 157
+    GT       shift, and go to state 158
+    LE       shift, and go to state 159
+    LT       shift, and go to state 160
+
+
+state 297
+
+   90 assign_stmt: ID LB expression RB ASSIGN expression .
+  114 expression: expression . GE expr
+  115           | expression . GT expr
+  116           | expression . LE expr
+  117           | expression . LT expr
+  118           | expression . EQUAL expr
+  119           | expression . UNEQUAL expr
+
+    EQUAL    shift, and go to state 155
+    UNEQUAL  shift, and go to state 156
+    GE       shift, and go to state 157
+    GT       shift, and go to state 158
+    LE       shift, and go to state 159
+    LT       shift, and go to state 160
+
+    $default  reduce using rule 90 (assign_stmt)
+
+
+state 298
+
+   34 simple_type_decl: MINUS const_value DOTDOT MINUS const_value .
+
+    $default  reduce using rule 34 (simple_type_decl)
+
+
+state 299
+
+   40 array_type_decl: ARRAY LB simple_type_decl RB OF . type_decl
+
+    MINUS          shift, and go to state 115
+    LP             shift, and go to state 116
+    INTEGER_TYPE   shift, and go to state 117
+    BOOLEAN_TYPE   shift, and go to state 118
+    CHAR_TYPE      shift, and go to state 119
+    REAL_TYPE      shift, and go to state 120
+    TRUE           shift, and go to state 34
+    FALSE          shift, and go to state 35
+    MAXINT         shift, and go to state 36
+    ARRAY          shift, and go to state 121
+    RECORD         shift, and go to state 122
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+    REAL           shift, and go to state 38
+    CHAR           shift, and go to state 39
+    STRING         shift, and go to state 40
+
+    const_value       go to state 123
+    type_decl         go to state 307
+    simple_type_decl  go to state 125
+    array_type_decl   go to state 126
+    record_type_decl  go to state 127
+    INTEGER           go to state 42
+    ID                go to state 128
+
+
+state 300
+
+   44 field_decl: name_list COLON type_decl SEMI .
+
+    $default  reduce using rule 44 (field_decl)
+
+
+state 301
+
+   65 para_decl_list: para_decl_list SEMI para_type_list .
+
+    $default  reduce using rule 65 (para_decl_list)
+
+
+state 302
+
+   67 para_type_list: var_name_list COLON simple_type_decl .
+
+    $default  reduce using rule 67 (para_type_list)
+
+
+state 303
+
+  109 case_expr: const_value COLON stmt SEMI .
+
+    $default  reduce using rule 109 (case_expr)
+
+
+state 304
+
+  110 case_expr: ID COLON stmt SEMI .
+
+    $default  reduce using rule 110 (case_expr)
+
+
+state 305
+
+  104 for_stmt: FOR ID ASSIGN expression TO expression DO . stmt
+
+    IF             shift, and go to state 45
+    REPEAT         shift, and go to state 46
+    WHILE          shift, and go to state 47
+    CASE           shift, and go to state 48
+    FOR            shift, and go to state 49
+    READ           shift, and go to state 50
+    WRITE          shift, and go to state 51
+    WRITELN        shift, and go to state 52
+    TOKEN_BEGIN    shift, and go to state 20
+    GOTO           shift, and go to state 54
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+
+    INTEGER         go to state 55
+    ID              go to state 56
+    compound_stmt   go to state 57
+    stmt            go to state 308
+    non_label_stmt  go to state 59
+    assign_stmt     go to state 60
+    proc_stmt       go to state 61
+    if_stmt         go to state 62
+    repeat_stmt     go to state 63
+    while_stmt      go to state 64
+    for_stmt        go to state 65
+    case_stmt       go to state 66
+    goto_stmt       go to state 67
+
+
+state 306
+
+  105 for_stmt: FOR ID ASSIGN expression DOWNTO expression DO . stmt
+
+    IF             shift, and go to state 45
+    REPEAT         shift, and go to state 46
+    WHILE          shift, and go to state 47
+    CASE           shift, and go to state 48
+    FOR            shift, and go to state 49
+    READ           shift, and go to state 50
+    WRITE          shift, and go to state 51
+    WRITELN        shift, and go to state 52
+    TOKEN_BEGIN    shift, and go to state 20
+    GOTO           shift, and go to state 54
+    TOKEN_ID       shift, and go to state 6
+    TOKEN_INTEGER  shift, and go to state 37
+
+    INTEGER         go to state 55
+    ID              go to state 56
+    compound_stmt   go to state 57
+    stmt            go to state 309
+    non_label_stmt  go to state 59
+    assign_stmt     go to state 60
+    proc_stmt       go to state 61
+    if_stmt         go to state 62
+    repeat_stmt     go to state 63
+    while_stmt      go to state 64
+    for_stmt        go to state 65
+    case_stmt       go to state 66
+    goto_stmt       go to state 67
+
+
+state 307
+
+   40 array_type_decl: ARRAY LB simple_type_decl RB OF type_decl .
+
+    $default  reduce using rule 40 (array_type_decl)
+
+
+state 308
+
+  104 for_stmt: FOR ID ASSIGN expression TO expression DO stmt .
+
+    $default  reduce using rule 104 (for_stmt)
+
+
+state 309
+
+  105 for_stmt: FOR ID ASSIGN expression DOWNTO expression DO stmt .
+
+    $default  reduce using rule 105 (for_stmt)

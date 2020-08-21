@@ -1,0 +1,28 @@
+FUNCTION max :
+PARAM tempnum1-max
+PARAM tempnum2-max
+var0 = tempnum1-max > tempnum2-max
+IF_FALSE var0 GOTO L0
+tempresult-max = tempnum1-max
+LABEL L0
+IF var0 GOTO L1
+tempresult-max = tempnum2-max
+LABEL L1
+var1 = tempresult-max + tempc-proc
+tempmax = var1
+RETURN tempmax
+FUNCTION main :
+tempa-proc = #100
+tempb-proc = #200
+BEGIN_ARGS
+var3 = tempa-proc
+ARG var3
+var4 = tempb-proc
+ARG var4
+var2 = CALL max
+tempc-proc = var2
+var5 = tempc-proc
+BEGIN_ARGS
+ARG var5
+CALL WRITE
+RETURN #0

@@ -1,0 +1,11 @@
+  ProgramDecl:hello
+    RoutineheadDecl
+      VarDecl
+        Id:a
+        SimpleSysType:IntExpType
+    For
+      Id:a
+      Const:1
+      Const:10
+      ProcSys
+        Id:a
